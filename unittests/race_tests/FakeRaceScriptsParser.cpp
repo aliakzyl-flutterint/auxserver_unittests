@@ -64,10 +64,13 @@ void FakeRaceData::init(int getRaceId)
 			continue;
 		RaceDetail rd;
 		rd.race.raceId = raceId;
-		rd.race.status = RaceStatus::RACE_STATUS_CREATED;
+		rd.race.status = RaceStatus::RACE_STATUS_STARTED;
 		rd.race.beginTime = CommUtcTime(beginTime);
         rd.race.plannedEndTime = CommUtcTime(plannedEndTime);
 
+		rd.race.raceTemplate.hosts = 1;
+		rd.race.raceTemplate.sites = 1;
+		rd.race.raceTemplate.clientPlatforms = 1;
 		rd.race.raceTemplate.gameTemplate.gameType = 1;
 		rd.race.raceTemplate.gameTemplate.variantType = 2;
 		//rd.race.raceTemplate.raceTemplateId = 1;

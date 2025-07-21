@@ -71,7 +71,7 @@ TEST_F(TestAuxRaceServerObject, init)
     EXPECT_EQ(1, fakeServer->serviceMap.size());
 }
 
-TEST_F(TestAuxRaceServerObject, get_data_from_db)
+TEST_F(TestAuxRaceServerObject, happy_flow)
 {
 	int raceId = 12;
 	FakeRaceData frd;
@@ -98,11 +98,33 @@ TEST_F(TestAuxRaceServerObject, get_data_from_db)
     fakeServer->triggerOnReply("RSS", AUX_RACE_DBM_MSG_A_GET_LIMITED_RACE_SESSIONS, dbmRaceSessionsMsg);
     fakeServer->triggerOnExit("RSS");
 
-	//RaceServer::AuxLobbyConn conn(&serverObject);
- //   CommMsgBody msg_raceOptIn;
-	//RaceServer::Lobby::Protocol_AUX_RACE_MSG_Q_RACE_OPTIN request;
-	//request.hostId = 1;
-	//request.raceId =  raceId;
-	//request.composeMsg(msg_raceOptIn);
- //   serverObject.processLobbyMessage(&conn, AUX_RACE_MSG_Q_RACE_OPTIN, msg_raceOptIn);
+
+	EXPECT_CALL(*mockService, serviceStarted(StrEq("OptIn")));
+
+	EXPECT_CALL(*mockPpIncludeBase, PCurrentUTCTime(_))
+		.WillRepeatedly(Invoke([](struct tm* tm) {
+		tm->tm_year = 2025 - 1900; // Year since 1900
+		tm->tm_mon = 5; // June (0-based)
+		tm->tm_mday = 10;
+		tm->tm_hour = 10;
+		tm->tm_min = 1;
+		tm->tm_sec = 29;
+			}));
+
+	RaceServer::AuxLobbyConn conn(&serverObject);
+    CommMsgBody msg_raceOptIn;
+	RaceServer::Lobby::Protocol_AUX_RACE_MSG_Q_RACE_OPTIN request_raceOptIn;
+	request_raceOptIn.hostId = 1;
+	request_raceOptIn.siteId = 1;
+	request_raceOptIn.clientPlatformId = 1;
+	request_raceOptIn.raceId =  raceId;
+	request_raceOptIn.composeMsg(msg_raceOptIn);
+    serverObject.processLobbyMessage(&conn, AUX_RACE_MSG_Q_RACE_OPTIN, msg_raceOptIn);
+
+    CommMsgBody msgOptInReply;
+	IS::RaceServer::Protocol_AUX_IS_MSG_A_OPTIN_RACE req_msgOptInReply;
+	req_msgOptInReply.errCode = 0;
+	req_msgOptInReply.composeMsg(msgOptInReply);
+
+	fakeServer->triggerOnReply("OptIn", AUX_IS_MSG_A_OPTIN_RACE, msgOptInReply);
 }

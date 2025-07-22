@@ -85,6 +85,23 @@ void FakeRaceData::init(int getRaceId)
 	}
 }
 
+aux::Race FakeRaceData::createRace(int raceId)
+{
+	using namespace aux;
+    Race raceObj;
+    raceObj.raceId = raceId;
+	raceObj.status = RaceStatus::RACE_STATUS_NONE;
+	raceObj.beginTime = CommUtcTime(beginTime);
+	raceObj.plannedEndTime = CommUtcTime(plannedEndTime);
+
+	raceObj.raceTemplate.hosts = 1;
+	raceObj.raceTemplate.sites = 1;
+	raceObj.raceTemplate.clientPlatforms = 1;
+	raceObj.raceTemplate.gameTemplate.gameType = 1;
+	raceObj.raceTemplate.gameTemplate.variantType = 2;
+    return raceObj;
+}
+
 Atf::Timer* Atf::AtfCommObjectImpl::getDefaultTimer()
 {
 	if (defTimer == nullptr)

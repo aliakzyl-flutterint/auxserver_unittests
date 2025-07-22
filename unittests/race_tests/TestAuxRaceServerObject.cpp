@@ -128,3 +128,20 @@ TEST_F(TestAuxRaceServerObject, happy_flow)
 
 	fakeServer->triggerOnReply("OptIn", AUX_IS_MSG_A_OPTIN_RACE, msgOptInReply);
 }
+
+TEST_F(TestAuxRaceServerObject, simulate_multiple_sessions)
+{
+	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+	MockCommInterface mockCommInterface;
+	RaceServer::AuxRaceServerObject serverObject(mockCommInterface);
+	CommMsgBody initMsg;
+	serverObject._safeInit(initMsg);
+
+
+	RaceServer::AuxSchedulerConn conn(&serverObject);
+	RaceServer::Scheduler::Protocol_AUX_RACE_MSG_Q_CREATE_RACE createRaceRqst;
+    createRaceRqst.race = FakeRaceData::createRace(5);
+	CommMsgBody createRaceMsg;
+    createRaceRqst.composeMsg(createRaceMsg);
+    conn.processMessage(AUX_RACE_MSG_Q_CREATE_RACE, createRaceMsg);
+}

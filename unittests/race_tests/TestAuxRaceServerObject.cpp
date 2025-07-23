@@ -71,71 +71,14 @@ TEST_F(TestAuxRaceServerObject, init)
     EXPECT_EQ(1, fakeServer->serviceMap.size());
 }
 
-TEST_F(TestAuxRaceServerObject, happy_flow)
+TEST_F(TestAuxRaceServerObject, create_race)
 {
-	int raceId = 12;
+	int raceId = 5;
 	FakeRaceData frd;
-    frd.init(raceId);
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
 
-	MockCommInterface mockCommInterface;
-	RaceServer::AuxRaceServerObject serverObject(mockCommInterface);
-	CommMsgBody initMsg;
-	serverObject._safeInit(initMsg);
-
-
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("RSS")));
-	
-    CommMsgBody dbmRacesMsg;
-    frd.dbmRaces.composeMsg(dbmRacesMsg);
-	fakeServer->triggerOnReply2("GADFDB", 0, dbmRacesMsg);
-	EXPECT_EQ(2, fakeServer->serviceMap.size());
-	//serverObject.processNeedDataFromDbmReplyMessage(dbmReply);
-	
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GetXRates")));
-	CommMsgBody dbmRaceSessionsMsg;
-    frd.dbmRaceSessions.composeMsg(dbmRaceSessionsMsg);
-    fakeServer->triggerOnReply("RSS", AUX_RACE_DBM_MSG_A_GET_LIMITED_RACE_SESSIONS, dbmRaceSessionsMsg);
-    fakeServer->triggerOnExit("RSS");
-
-
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("OptIn")));
-
-	EXPECT_CALL(*mockPpIncludeBase, PCurrentUTCTime(_))
-		.WillRepeatedly(Invoke([](struct tm* tm) {
-		tm->tm_year = 2025 - 1900; // Year since 1900
-		tm->tm_mon = 5; // June (0-based)
-		tm->tm_mday = 10;
-		tm->tm_hour = 10;
-		tm->tm_min = 1;
-		tm->tm_sec = 29;
-			}));
-
-	RaceServer::AuxLobbyConn conn(&serverObject);
-    CommMsgBody msg_raceOptIn;
-	RaceServer::Lobby::Protocol_AUX_RACE_MSG_Q_RACE_OPTIN request_raceOptIn;
-	request_raceOptIn.hostId = 1;
-	request_raceOptIn.siteId = 1;
-	request_raceOptIn.clientPlatformId = 1;
-	request_raceOptIn.raceId =  raceId;
-	request_raceOptIn.composeMsg(msg_raceOptIn);
-    serverObject.processLobbyMessage(&conn, AUX_RACE_MSG_Q_RACE_OPTIN, msg_raceOptIn);
-
-    CommMsgBody msgOptInReply;
-	IS::RaceServer::Protocol_AUX_IS_MSG_A_OPTIN_RACE req_msgOptInReply;
-	req_msgOptInReply.errCode = 0;
-	req_msgOptInReply.composeMsg(msgOptInReply);
-
-	fakeServer->triggerOnReply("OptIn", AUX_IS_MSG_A_OPTIN_RACE, msgOptInReply);
-}
-
-TEST_F(TestAuxRaceServerObject, simulate_multiple_sessions)
-{
 	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
 	
 	MockCommInterface mockCommInterface;
-	EXPECT_CALL(mockCommInterface, _getInQueueSize()).Times(AtLeast(1))
-		.WillRepeatedly(Return(0));
 
 	RaceServer::AuxRaceServerObject serverObject(mockCommInterface);
 	CommMsgBody initMsg;
@@ -145,23 +88,61 @@ TEST_F(TestAuxRaceServerObject, simulate_multiple_sessions)
 	RaceServer::AuxSchedulerConn schedConn(&serverObject);
 	RaceServer::AuxLobbyConn lobbyConn(&serverObject);
 
-	int raceId = 5;
-
 	RaceServer::Scheduler::Protocol_AUX_RACE_MSG_Q_CREATE_RACE createRaceRqst;
-    createRaceRqst.race = FakeRaceData::createRace(raceId);
+    createRaceRqst.race = frd.createRace(raceId);
 	CommMsgBody createRaceMsg;
     createRaceRqst.composeMsg(createRaceMsg);
 	schedConn.processMessage(AUX_RACE_MSG_Q_CREATE_RACE, createRaceMsg);
+}
+
+
+TEST_F(TestAuxRaceServerObject, race_opt_in_4play)
+{
+	int raceId = 6;
+
+	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+
+	MockCommInterface mockCommInterface;
+	EXPECT_CALL(mockCommInterface, _getInQueueSize()).Times(AtLeast(1))
+		.WillRepeatedly(Return(0));
+
+	RaceServer::AuxRaceServerObject serverObject(mockCommInterface);
+	CommMsgBody initMsg;
+	serverObject._safeInit(initMsg);
+
+	EXPECT_CALL(*mockService, serviceStarted(StrEq("RSS")));
+	EXPECT_CALL(*mockService, serviceStarted(StrEq("GetXRates")));
+
+	FakeRaceData frd;
+    frd.addDbmRace(raceId);
+	CommMsgBody dbmRacesMsg;
+	frd.dbmRaces.composeMsg(dbmRacesMsg);
+	fakeServer->triggerOnReply2("GADFDB", 0, dbmRacesMsg);
+	fakeServer->triggerOnExit("RSS");
+
+	// connections
+	RaceServer::AuxLobbyConn lobbyConn(&serverObject);
 
 	// 2 users opt in for play
-	
+    EXPECT_CALL(*mockService, serviceStarted(StrEq("OptIn"))).Times(2);
+
+	EXPECT_CALL(*mockPpIncludeBase, PCurrentUTCTime(_))
+	.WillRepeatedly(Invoke([](struct tm* tm) {
+		tm->tm_year = 2025 - 1900; // Year since 1900
+		tm->tm_mon = 5; // June (0-based)
+		tm->tm_mday = 10;
+		tm->tm_hour = 10;
+		tm->tm_min = 1;
+		tm->tm_sec = 29;
+	}));
+
 	CommMsgBody optInUser1Msg;
-    auto optInUser1Rqst = FakeRaceData::createOptUser(raceId, 101);
-    optInUser1Rqst.composeMsg(optInUser1Msg);
+	auto optInUser1Rqst = frd.createOptUser(raceId, 101);
+	optInUser1Rqst.composeMsg(optInUser1Msg);
 	serverObject.processLobbyMessage(&lobbyConn, AUX_RACE_MSG_Q_RACE_OPTIN_4_PLAY, optInUser1Msg);
 
 	CommMsgBody optInUser2Msg;
-	auto optInUser2Rqst = FakeRaceData::createOptUser(raceId, 213);
+	auto optInUser2Rqst = frd.createOptUser(raceId, 213);
 	optInUser2Rqst.composeMsg(optInUser2Msg);
 	serverObject.processLobbyMessage(&lobbyConn, AUX_RACE_MSG_Q_RACE_OPTIN_4_PLAY, optInUser2Msg);
 }

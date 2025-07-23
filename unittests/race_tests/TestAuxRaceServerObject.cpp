@@ -132,16 +132,36 @@ TEST_F(TestAuxRaceServerObject, happy_flow)
 TEST_F(TestAuxRaceServerObject, simulate_multiple_sessions)
 {
 	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+	
 	MockCommInterface mockCommInterface;
+	EXPECT_CALL(mockCommInterface, _getInQueueSize()).Times(AtLeast(1))
+		.WillRepeatedly(Return(0));
+
 	RaceServer::AuxRaceServerObject serverObject(mockCommInterface);
 	CommMsgBody initMsg;
 	serverObject._safeInit(initMsg);
 
+	// connections
+	RaceServer::AuxSchedulerConn schedConn(&serverObject);
+	RaceServer::AuxLobbyConn lobbyConn(&serverObject);
 
-	RaceServer::AuxSchedulerConn conn(&serverObject);
+	int raceId = 5;
+
 	RaceServer::Scheduler::Protocol_AUX_RACE_MSG_Q_CREATE_RACE createRaceRqst;
-    createRaceRqst.race = FakeRaceData::createRace(5);
+    createRaceRqst.race = FakeRaceData::createRace(raceId);
 	CommMsgBody createRaceMsg;
     createRaceRqst.composeMsg(createRaceMsg);
-    conn.processMessage(AUX_RACE_MSG_Q_CREATE_RACE, createRaceMsg);
+	schedConn.processMessage(AUX_RACE_MSG_Q_CREATE_RACE, createRaceMsg);
+
+	// 2 users opt in for play
+	
+	CommMsgBody optInUser1Msg;
+    auto optInUser1Rqst = FakeRaceData::createOptUser(raceId, 101);
+    optInUser1Rqst.composeMsg(optInUser1Msg);
+	serverObject.processLobbyMessage(&lobbyConn, AUX_RACE_MSG_Q_RACE_OPTIN_4_PLAY, optInUser1Msg);
+
+	CommMsgBody optInUser2Msg;
+	auto optInUser2Rqst = FakeRaceData::createOptUser(raceId, 213);
+	optInUser2Rqst.composeMsg(optInUser2Msg);
+	serverObject.processLobbyMessage(&lobbyConn, AUX_RACE_MSG_Q_RACE_OPTIN_4_PLAY, optInUser2Msg);
 }

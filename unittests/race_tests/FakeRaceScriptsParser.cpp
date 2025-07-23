@@ -102,6 +102,18 @@ aux::Race FakeRaceData::createRace(int raceId)
     return raceObj;
 }
 
+RaceServer::Lobby::Protocol_AUX_RACE_MSG_Q_RACE_OPTIN_4_PLAY FakeRaceData::createOptUser(int raceId, int userId)
+{
+    using namespace RaceServer::Lobby;
+	Protocol_AUX_RACE_MSG_Q_RACE_OPTIN_4_PLAY rqst;
+	rqst.hostId = 1;
+	rqst.siteId = 1;
+	rqst.clientPlatformId = 1;
+	rqst.raceId = raceId;
+    rqst.userIntId = userId;
+	return rqst;
+}
+
 Atf::Timer* Atf::AtfCommObjectImpl::getDefaultTimer()
 {
 	if (defTimer == nullptr)

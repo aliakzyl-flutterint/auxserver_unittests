@@ -8,6 +8,7 @@ set(UNITTESTS_PATH ..)
 set(RACE_TEST_FILES
 ${UNITTESTS_PATH}/common/GenericServerObjectSuite.cpp
 TestAuxRaceServerObject.cpp
+TestLobbyAndRaceServers.cpp
 )
 
 set(STUB_FILES
@@ -22,6 +23,7 @@ ${STUBS_PATH}/aux_stubs.cpp
 ${STUBS_PATH}/auxgenerictypes_stubs.cpp
 ${STUBS_PATH}/atf_stubs.cpp
 ${STUBS_PATH}/atf1_stubs.cpp
+${STUBS_PATH}/lobby_stubs.cpp
 )
 
 set(FAKE_FILES
@@ -46,6 +48,10 @@ set(PRODUCTION_FILES
 	${AUX_PATH}/auxservercommon/AuxConfigCommonParser.cpp
 	${AUX_PATH}/auxservercommon/AuxServerCommonDefs.cpp
 	${ATF_PATH}/TimerServer.cpp
+
+	# Lobby production files
+	${AUX_PATH}/auxlobby/AuxLobbyServerObject.cpp
+	${AUX_PATH}/auxlobby/AuxLobbyGameRestriction.cpp
 )
 
 set (PROTOCOL_FILES
@@ -73,6 +79,29 @@ ${AUX_PATH}/auxprotocols/RaceDbmProtocols.cpp
 ${AUX_PATH}/auxprotocols/NotificationProtocols.cpp
 ${AUX_PATH}/auxprotocols/AuxReefProtocols.cpp
 ${AUX_PATH}/auxprotocols/JackpotServerProtocols.cpp
+
+# Lobby protocols
+${AUX_PATH}/auxprotocols/LobbyClientProtocols.cpp
+${AUX_PATH}/auxprotocols/LobbyServerProtocols.cpp
+${AUX_PATH}/auxprotocols/ShadowLobbyProtocols.cpp
+${AUX_PATH}/auxprotocols/ShadowLobbyClientProtocols.cpp
+${AUX_PATH}/auxprotocols/MainDbmProtocols.cpp
+${AUX_PATH}/auxprotocols/QueryDbmProtocols.cpp
+${AUX_PATH}/auxprotocols/TableServerProtocols.cpp
+${AUX_PATH}/auxprotocols/AuxServerErrors.cpp
+${AUX_PATH}/auxprotocols/blackjackprotocols.cpp
+${AUX_PATH}/auxprotocols/AuxUserSettingsDbmProtocols.cpp
+${AUX_PATH}/auxprotocols/VTTMServerProtocols.cpp
+${PRODUCTION_BASE_PATH}/auxprotocols/HHServerProtocols.cpp
+${AUX_PATH}/auxserverprotocols/CdlDbmProtocols.cpp
+${AUX_PATH}/auxprotocols/AdmProtocols.cpp
+${AUX_PATH}/auxprotocols/rouletteprotocols.cpp
+${AUX_PATH}/auxprotocols/DoubleBallRouletteProtocols.cpp
+${AUX_PATH}/auxprotocols/HeadsUpHoldemProtocols.cpp
+${AUX_PATH}/auxprotocols/baccaratprotocols.cpp
+${AUX_PATH}/auxprotocols/CommunityBaccaratProtocols.cpp
+${AUX_PATH}/auxprotocols/ThreeCardPokerProtocols.cpp
+${AUX_PATH}/auxprotocols/RGProxyServerProtocols.cpp
 )
 
 set(COMMLIB_FILES

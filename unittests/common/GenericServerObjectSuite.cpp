@@ -29,7 +29,7 @@ void GenericServerObjectSuite::SetUp()
 
 		
 	EXPECT_CALL(*mockServerStartParams,
-		parseServerStartParams(_, _, _)).WillOnce(
+		parseServerStartParams(_, _, _)).WillRepeatedly(
 			Invoke([this](ServerStartParams* serverStartParams, CommMsgParser& parser, const char* iniFileName_)
 				{
 					serverStartParams->fullIniFileName = this->iniFileName.c_str();
@@ -39,8 +39,7 @@ void GenericServerObjectSuite::SetUp()
 
 	ExpectInit();
 
-	EXPECT_CALL(*mockAuxReefAccessor, init(_));
-
+	EXPECT_CALL(*mockAuxReefAccessor, init(_)).Times(AtLeast(1));
 }
 
 void GenericServerObjectSuite::TearDown()

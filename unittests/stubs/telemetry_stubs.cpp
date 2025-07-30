@@ -5,6 +5,10 @@ namespace pokerstars { namespace telemetry { namespace config {
 	bool Config::reload(const PIniFile& appConfig, const char* const rootSection, const Config::EslResolve& eslResolve) {
 		return false;
 	}
+
+	bool Config::reload(const PIniFile& appConfig, const EslResolve& eslResolve) {
+		return false;
+	}
 }}}
 
 namespace pokerstars {namespace telemetry {namespace gateway {

@@ -7,6 +7,7 @@ set(UNITTESTS_PATH ..)
 
 set(LOBBY_TEST_FILES
 ${UNITTESTS_PATH}/common/GenericServerObjectSuite.cpp
+${UNITTESTS_PATH}/common/ServerObjectsExpects.cpp
 GenericLobbyTestSuite.cpp
 TestAuxLobbyServerObject.cpp
 TestAuxGameRestriction.cpp

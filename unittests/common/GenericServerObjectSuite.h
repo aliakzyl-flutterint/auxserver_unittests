@@ -11,7 +11,6 @@ protected:
 	void TearDown() override;
 
 	virtual void ExpectInit() = 0;
-	virtual ~GenericServerObjectSuite() = default;
 
 protected:
 	const std::string iniFileName = "TestFileName";

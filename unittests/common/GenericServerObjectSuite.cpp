@@ -26,6 +26,7 @@ void GenericServerObjectSuite::SetUp()
 	mockPIniFile = new MockPIniFile();
 	mockAtfCommObjectImpl = new MockAtfCommObjectImpl();
 	mockServerStartParams = new MockServerStartParams();
+	mockAuxReefAccessor = new MockAuxReefAccessor();
 
 		
 	EXPECT_CALL(*mockServerStartParams,
@@ -68,5 +69,11 @@ void GenericServerObjectSuite::TearDown()
 	{
 		delete mockServerStartParams;
 		mockServerStartParams = nullptr;
+	}
+
+	if (mockAuxReefAccessor)
+	{
+		delete mockAuxReefAccessor;
+		mockAuxReefAccessor = nullptr;
 	}
 }

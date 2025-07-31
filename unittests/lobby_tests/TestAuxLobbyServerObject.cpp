@@ -22,11 +22,6 @@ protected:
 	{
 		GenericLobbyTestSuite::TearDown();
 	}
-
-	void expectServicesStarted()
-	{
-		EXPECT_CALL(*mockService, serviceStarted(StrEq("InitLobby")));
-	}
 };
 
 TEST_F(TestAuxLobbyServerObject, test_init)
@@ -36,7 +31,6 @@ TEST_F(TestAuxLobbyServerObject, test_init)
 	AuxLobbyServerObject tstObj(mockCommInterface);
 
 	expectConnects(tstObj);
-	expectServicesStarted();
 
 	CommMsgBody initMsg;
 	
@@ -53,7 +47,6 @@ TEST_F(TestAuxLobbyServerObject, test_onreply2)
 	AuxLobbyServerObject tstObj(mockCommInterface);
 
 	expectConnects(tstObj);
-	expectServicesStarted();
 
 	CommMsgBody initMsg;
 

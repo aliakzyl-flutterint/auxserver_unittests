@@ -58,6 +58,8 @@ TEST_F(TestAuxRaceServerObject, create_race)
 	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
 	
 	MockCommInterface mockCommInterface;
+	EXPECT_CALL(mockCommInterface, _getInQueueSize()).Times(AtLeast(1))
+	.WillRepeatedly(Return(0));
 
 	RaceServer::AuxRaceServerObject serverObject(mockCommInterface);
 	CommMsgBody initMsg;

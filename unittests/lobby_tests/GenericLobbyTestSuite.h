@@ -17,11 +17,11 @@ protected:
 	void TearDown() override;
 	void ExpectInit() override;
 
-	void expectConnects(AuxLobbyServerObject& tstObj);
+	static void expectConnects(AuxLobbyServerObject& tstObj);
 
 	void addUser(unsigned hostId, unsigned userIntId);
 
-	void submitUsersToServer();
+	void submitUsersToServer() const;
 
 protected:
 	std::vector< IS::GGNLiveLoginSessionInfo > users;

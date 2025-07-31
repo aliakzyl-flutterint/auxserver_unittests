@@ -1,13 +1,27 @@
 #include "ServerObjectsExpects.h"
 
+#include "AuxLobbyServerObject.h"
+#include "atf/MockAtfCommObjectImpl.h"
 #include "plib/MockPIniFile.h"
 
 using namespace testing;
 
 namespace
 {
-	static std::string defaultValue = "testDefaultValue";
-	static std::string hundredValue = "100";
+	std::string defaultValue = "testDefaultValue";
+	std::string hundredValue = "100";
+	std::string connType = "auxlobby";
+	std::string connAuxApp = "auxapp";
+	std::string dbmAddress = "testDbmAddress";
+	std::string dbmInstance = "testDbmInstance";
+	std::string roOltpDbmAddress = "testRoOltpDbmAddress";
+	std::string roOltpDbmInstance = "testRoOltpDbmInstance";
+	std::string idDbmAddress = "testIdDbmAddress";
+	std::string idDbmInstance = "testIdDbmInstance";
+	std::string authIntegrationServerAddress = "testAuthIntegrationServerAddress";
+	std::string authIntegrationServerInstance = "testAuthIntegrationServerInstance";
+	std::string integrationServerAddress = "testIntegrationServerAddress";
+	std::string integrationServerInstance = "testIntegrationServerInstance";
 }
 
 void expects::ExpectAuxRaceInits()
@@ -126,4 +140,24 @@ void expects::ExpectLobbyInits()
 	EXPECT_CALL(*mockPIniFile, getSectionIntProperty(_, "maxGamesPerPlayer.SIM", _));
 	EXPECT_CALL(*mockPIniFile, getSectionIntProperty(_, "maxGamesPerPlayer.PPB", _));
 	EXPECT_CALL(*mockPIniFile, getSectionIntProperty(_, "maxGamesPerPlayer.FD", _));
+}
+
+void expects::ExpectLobbyConnects(AuxLobbyServerObject& tstObj)
+{
+	tstObj.staticConfig.staticConnect.dbmAddress.set(dbmAddress.c_str());
+	tstObj.staticConfig.staticConnect.dbmInstance.set(dbmInstance.c_str());
+	tstObj.staticConfig.staticConnect.roOltpDbmAddress.set(roOltpDbmAddress.c_str());
+	tstObj.staticConfig.staticConnect.roOltpDbmInstance.set(roOltpDbmInstance.c_str());
+	tstObj.staticConfig.staticConnect.idDbmAddress.set(idDbmAddress.c_str());
+	tstObj.staticConfig.staticConnect.idDbmInstance.set(idDbmInstance.c_str());
+	tstObj.staticConfig.staticConnect.authIntegrationServerAddress.set(authIntegrationServerAddress.c_str());
+	tstObj.staticConfig.staticConnect.authIntegrationServerInstance.set(authIntegrationServerInstance.c_str());
+	tstObj.staticConfig.staticConnect.integrationServerAddress.set(integrationServerAddress.c_str());
+	tstObj.staticConfig.staticConnect.integrationServerInstance.set(integrationServerInstance.c_str());
+
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(StrEq(dbmAddress.c_str()), StrEq(dbmInstance.c_str()), StrEq(connType.c_str())));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(StrEq(roOltpDbmAddress.c_str()), StrEq(roOltpDbmInstance.c_str()), StrEq(connType.c_str())));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(StrEq(idDbmAddress.c_str()), StrEq(idDbmInstance.c_str()), StrEq(connAuxApp.c_str())));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(StrEq(authIntegrationServerAddress.c_str()), StrEq(authIntegrationServerInstance.c_str()), StrEq(connType.c_str())));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(StrEq(integrationServerAddress.c_str()), StrEq(integrationServerInstance.c_str()), StrEq(connType.c_str())));
 }

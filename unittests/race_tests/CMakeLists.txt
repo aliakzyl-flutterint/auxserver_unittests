@@ -23,6 +23,7 @@ ${STUBS_PATH}/protocols_stubs.cpp
 ${STUBS_PATH}/aux_stubs.cpp
 ${STUBS_PATH}/auxgenerictypes_stubs.cpp
 ${STUBS_PATH}/atf_stubs.cpp
+${STUBS_PATH}/atf_connections_stub.cpp
 ${STUBS_PATH}/atf1_stubs.cpp
 ${STUBS_PATH}/lobby_stubs.cpp
 )

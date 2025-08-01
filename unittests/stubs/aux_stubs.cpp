@@ -1,6 +1,5 @@
 #include "AtfCipwaConn.h"
 #include "AtfCommServerObject.h"
-#include "AtfCommServerGConn.h"
 #include "AtfCommPlayerConns.h"
 #include "Service.h"
 #include "telemetry/gateway/client.h"
@@ -234,26 +233,6 @@ void Atf::AtfCommServerConnection::_traceDisconnected(int errCode, const char* e
 
 Atf::ServiceReplyWaitableOnReliableConnection::ServiceReplyWaitableOnReliableConnection()
 {
-}
-
-void Atf::AtfServerReverseGConnection::connected()
-{
-}
-
-void Atf::AtfServerReverseGConnection::closedOrDisconnected(int errCode, const char* errMsg)
-{
-}
-void Atf::AtfServerReverseGConnection::postGMsg(UINT32 reqId, const Atf::MessageProtocol& msg)
-{
-}
-
-void Atf::AtfServerReverseGConnection::traceOutgoing(UINT32 msgId, const CommMsgBody& body, UINT32 serverReqId)
-{
-}
-
-CommServerConnection* Atf::AtfServerReverseGConnectionFactory::_AtfCommServerConnectionFactory::createConnection()
-{
-	return nullptr;
 }
 
 void Atf::Service::setServiceReturnMsg(UINT32 resMsgId, CommMsgBody& resMsg)

@@ -68,9 +68,10 @@ TEST_F(TestLobbyAndRaceServers, processPlayerSeated)
 	lobbyServer._safeInit(msgLobbyInit);
     auto* gConn = new LobbyServerTableGConn(&lobbyServer, "TB");
 
-	// Lobby::Table::Protocol_AUX_LOBBY_MSG_Q_PLAYER_SIT playerSit;
-	// CommMsgBody msgPlayerSitted;
-	// playerSit.gameSessionId = 1;
-	// playerSit.composeMsg(msgPlayerSitted);
- //    lobbyServer.processTableMessage(gConn, AUX_LOBBY_MSG_Q_PLAYER_SIT, msgPlayerSitted);
+	Lobby::Table::Protocol_AUX_LOBBY_MSG_Q_PLAYER_SIT playerSit;
+	CommMsgBody msgPlayerSitted;
+	playerSit.gameSessionId = 1;
+	playerSit.composeMsg(msgPlayerSitted);
+    lobbyServer.processTableMessage(gConn, AUX_LOBBY_MSG_Q_PLAYER_SIT, msgPlayerSitted);
+
 }

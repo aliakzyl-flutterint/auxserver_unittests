@@ -23,6 +23,13 @@ void FakeServer::triggerOnReply2(const std::string& serviceName, unsigned int ms
 	service->safeProcessMessage(msgId, msg);
 }
 
+void FakeServer::triggerOnReply3(const std::string& serviceName, unsigned int msgId, const CommMsgBody& msg)
+{
+	auto& service = serviceMap[serviceName];
+	service->directGoToNewState(4);
+	service->safeProcessMessage(msgId, msg);
+}
+
 void FakeServer::triggerOnExit(const std::string& serviceName)
 {
 	auto& service = serviceMap[serviceName];

@@ -7,6 +7,7 @@
 
 #include "atf/MockService.h"
 #include "atf/FakeServer.h"
+#include "atf/FakeConnection.h"
 
 #include "commlib2a/MockCommInterface.h"
 
@@ -17,11 +18,17 @@ protected:
 	void SetUp() override
 	{
 		GenericServerObjectSuite::SetUp();
+        fakeConnection = new FakeConnection();
 	};
 
 	void TearDown() override
 	{
 		GenericServerObjectSuite::TearDown();
+        if (fakeConnection)
+        {
+            delete fakeConnection;
+            fakeConnection = nullptr;
+        }
 	}
 
 	void ExpectInit() override
@@ -66,12 +73,18 @@ TEST_F(TestLobbyAndRaceServers, processPlayerSeated)
 	expects::ExpectLobbyConnects(lobbyServer);
 	CommMsgBody msgLobbyInit;
 	lobbyServer._safeInit(msgLobbyInit);
+
+	RaceServer::AuxLobbyConn lobby2race(&raceServer);
+	//fakeConnection->connectServices(&lobbyServer, &lobby2race);
+
+	EXPECT_CALL(*fakeConnection, postGMsg(StrEq("TB "), _, _));
+
     auto* gConn = new LobbyServerTableGConn(&lobbyServer, "TB");
 
 	Lobby::Table::Protocol_AUX_LOBBY_MSG_Q_PLAYER_SIT playerSit;
-	CommMsgBody msgPlayerSitted;
+	CommMsgBody msgPlayerSit;
 	playerSit.gameSessionId = 1;
-	playerSit.composeMsg(msgPlayerSitted);
-    lobbyServer.processTableMessage(gConn, AUX_LOBBY_MSG_Q_PLAYER_SIT, msgPlayerSitted);
+	playerSit.composeMsg(msgPlayerSit);
+    lobbyServer.processTableMessage(gConn, AUX_LOBBY_MSG_Q_PLAYER_SIT, msgPlayerSit);
 
 }

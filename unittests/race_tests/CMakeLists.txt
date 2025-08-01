@@ -23,7 +23,6 @@ ${STUBS_PATH}/protocols_stubs.cpp
 ${STUBS_PATH}/aux_stubs.cpp
 ${STUBS_PATH}/auxgenerictypes_stubs.cpp
 ${STUBS_PATH}/atf_stubs.cpp
-${STUBS_PATH}/atf_connections_stub.cpp
 ${STUBS_PATH}/atf1_stubs.cpp
 ${STUBS_PATH}/lobby_stubs.cpp
 )
@@ -33,6 +32,7 @@ FakeRaceScriptsParser.cpp
 ${FAKES_PATH}/auxservercommon/FakeAuxCommServerObject.cpp
 ${FAKES_PATH}/auxservercommon/FakeAuxReefAccessor.cpp
 ${FAKES_PATH}/atf/FakeServer.cpp
+${FAKES_PATH}/atf/FakeConnection.cpp
 ${FAKES_PATH}/plib/ppincludebase_prod.cpp
 )
 

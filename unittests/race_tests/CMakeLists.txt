@@ -8,6 +8,7 @@ set(UNITTESTS_PATH ..)
 set(RACE_TEST_FILES
 ${UNITTESTS_PATH}/common/GenericServerObjectSuite.cpp
 ${UNITTESTS_PATH}/common/ServerObjectsExpects.cpp
+FakeLobbyInit.cpp
 TestAuxRaceServerObject.cpp
 TestLobbyAndRaceServers.cpp
 )

@@ -32,6 +32,7 @@ set(FAKE_FILES
 ${FAKES_PATH}/auxservercommon/FakeAuxCommServerObject.cpp
 ${FAKES_PATH}/auxservercommon/FakeAuxReefAccessor.cpp
 ${FAKES_PATH}/atf/FakeServer.cpp
+${FAKES_PATH}/lobby/FakeLobby.cpp
 )
 
 set(MOCK_FILES

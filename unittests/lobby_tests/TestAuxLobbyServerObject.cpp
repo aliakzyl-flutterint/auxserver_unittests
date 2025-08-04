@@ -7,6 +7,8 @@
 #include "atf/MockService.h"
 #include "atf/FakeServer.h"
 
+
+
 using namespace testing;
 
 class TestAuxLobbyServerObject : public GenericLobbyTestSuite

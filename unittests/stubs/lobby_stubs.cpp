@@ -157,10 +157,6 @@ void AuxLobbyServerObject::updateHostSystemInfoWhenLobbyRecoveryStart()
 {
 }
 
-void AuxLobbyServerObject::initCriticalComponents()
-{
-}
-
 void LobbyPerformanceCounter::getPerformanceData(std::vector<PNameValue>& data, std::vector<PerfDataWithTags>& dataWithTags)
 {
 }

@@ -17,6 +17,7 @@ ${STUBS_PATH}/plib_stubs.cpp
 ${STUBS_PATH}/protocols_stubs.cpp
 ${STUBS_PATH}/aux_stubs.cpp
 ${STUBS_PATH}/atf_stubs.cpp
+${STUBS_PATH}/atf_connections_stub.cpp
 ${STUBS_PATH}/AtfCommObjectImpl_stubs.cpp
 ${STUBS_PATH}/unique_seqid_stubs.cpp
 ${STUBS_PATH}/checkserver_stubs.cpp

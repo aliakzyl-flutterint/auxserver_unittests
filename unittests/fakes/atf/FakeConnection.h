@@ -18,6 +18,7 @@ public:
     friend Atf::AtfServerReverseGConnection;
     void connectServices(const std::string& senderTraceMarker, Atf::AtfCommServerConnection* receiver);
     MOCK_METHOD(void, postGMsg,(const std::string& traceMarker, UINT32 reqId, const Atf::MessageProtocol& msg));
+    MOCK_METHOD(void, postMsg, (const std::string& msgIdStr, const Atf::MessageProtocol& msg));
 };
 
 extern FakeConnection* fakeConnection;

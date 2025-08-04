@@ -128,11 +128,6 @@ Atf::AtfCommClientGConnection::~AtfCommClientGConnection()
 void Atf::AtfCommClientGConnection::setTraceMarker(const char* newTraceMarker)
 {}
 
-UINT32 Atf::AtfCommClientGConnection::postMsg(const Atf::MessageProtocol& msg, AsyncCall* call /* = 0 */, bool trace /* = true */)
-{
-	return 0;
-}
-
 void Atf::AtfCommClientGConnection::traceOutgoing(UINT32 msgId, UINT32 reqId)
 {
 }

@@ -74,9 +74,28 @@ TEST_F(TestLobbyAndRaceServers, processPlayerSeated)
 	lobbyServer._safeInit(msgLobbyInit);
 
 	RaceServer::AuxLobbyConn lobby2race(&raceServer);
-	//fakeConnection->connectServices(&lobbyServer, &lobby2race);
 
-	EXPECT_CALL(*fakeConnection, postGMsg(StrEq("TB "), _, _));
+	EXPECT_CALL(*fakeConnection, postGMsg(StrEq("TB "), _, _)).WillOnce(
+		Invoke([&](const std::string& traceMarker, UINT32 reqId, const Atf::MessageProtocol& msg)
+		{
+			auto* real_msg = dynamic_cast<const Lobby::Table::Protocol_AUX_LOBBY_MSG_A_PLAYER_SIT*>(&msg);
+            EXPECT_TRUE(real_msg != nullptr);
+			EXPECT_EQ(0, real_msg->errStr.length());
+			EXPECT_EQ(0, real_msg->errCode);
+		})
+		);
+
+	EXPECT_CALL(*fakeConnection, postMsg(StrEq("RC_BIND"), _)).WillOnce(
+		Invoke([&](const std::string& msgIdStr, const Atf::MessageProtocol& msg)
+		{	
+            auto* real_msg = dynamic_cast<const RaceServer::Lobby::Protocol_AUX_RACE_MSG_Q_RACE_BIND*>(&msg);
+            EXPECT_TRUE(real_msg != nullptr);
+            EXPECT_EQ(1, real_msg->gameSessionId);
+            EXPECT_EQ(2, real_msg->userIntId);
+            EXPECT_EQ(301, real_msg->tableId);
+            EXPECT_EQ(2002, real_msg->loginSessionId);
+		})
+	);
 
     auto* gConn = new LobbyServerTableGConn(&lobbyServer, "TB");
 	CommMsgBody usrAuth;

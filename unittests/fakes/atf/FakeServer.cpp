@@ -70,7 +70,7 @@ void Atf::Service::startService()
 	//CommMsgBody msg;
 	//this->processMessage(0, msg);
 	fakeServer->addService(this->serviceNameBase.c_str(), this);
-	mockService->serviceStarted(this->serviceNameBase);
+	mockService->serviceStarted(this->serviceNameBase.c_str());
 }
 
 UINT32 Atf::Service::startTimerMSec(UINT32 msgId, INT32 timeOutInMSec)

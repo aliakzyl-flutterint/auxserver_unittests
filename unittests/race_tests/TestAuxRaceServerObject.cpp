@@ -50,7 +50,7 @@ protected:
 
 TEST_F(TestAuxRaceServerObject, init)
 {
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+	EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
 
 	MockCommInterface mockCommInterface;
 	RaceServer::AuxRaceServerObject raceServer(mockCommInterface);
@@ -59,7 +59,7 @@ TEST_F(TestAuxRaceServerObject, init)
     EXPECT_EQ(1, fakeServer->serviceMap.size());
 	EXPECT_EQ(0, fakeConnection->connections.size());
 
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GetXRates")));
+	EXPECT_CALL(*mockService, serviceStarted("GetXRates"));
 	raceServer.resumedInit();
 	EXPECT_EQ(6, fakeConnection->connections.size());
 	EXPECT_TRUE(fakeConnection->connections.count("admin"));
@@ -75,7 +75,7 @@ TEST_F(TestAuxRaceServerObject, init)
 // 	int raceId = 5;
 // 	FakeRaceData frd;
 //
-// 	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+// 	EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
 //
 // 	MockCommInterface mockCommInterface;
 // 	EXPECT_CALL(mockCommInterface, _getInQueueSize()).Times(AtLeast(1))
@@ -101,7 +101,7 @@ TEST_F(TestAuxRaceServerObject, init)
 // {
 // 	int raceId = 6;
 //
-// 	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+// 	EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
 //
 // 	MockCommInterface mockCommInterface;
 // 	EXPECT_CALL(mockCommInterface, _getInQueueSize()).Times(AtLeast(1))
@@ -111,8 +111,8 @@ TEST_F(TestAuxRaceServerObject, init)
 // 	CommMsgBody initMsg;
 // 	serverObject._safeInit(initMsg);
 //
-// 	EXPECT_CALL(*mockService, serviceStarted(StrEq("RSS")));
-// 	EXPECT_CALL(*mockService, serviceStarted(StrEq("GetXRates")));
+// 	EXPECT_CALL(*mockService, serviceStarted("RSS"));
+// 	EXPECT_CALL(*mockService, serviceStarted("GetXRates"));
 //
 // 	FakeRaceData frd;
 //     frd.addDbmRace(raceId);
@@ -125,7 +125,7 @@ TEST_F(TestAuxRaceServerObject, init)
 // 	RaceServer::AuxLobbyConn lobbyConn(&serverObject);
 //
 // 	// 2 users opt in for play
-//     EXPECT_CALL(*mockService, serviceStarted(StrEq("OptIn"))).Times(2);
+//     EXPECT_CALL(*mockService, serviceStarted("OptIn")).Times(2);
 //
 // 	EXPECT_CALL(*mockPpIncludeBase, PCurrentUTCTime(_))
 // 	.WillRepeatedly(Invoke([](struct tm* tm) {

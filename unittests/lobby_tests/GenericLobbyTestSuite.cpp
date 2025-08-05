@@ -12,7 +12,7 @@ using namespace testing;
 void GenericLobbyTestSuite::SetUp()
 {
 	GenericServerObjectSuite::SetUp();
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("InitLobby")));
+	EXPECT_CALL(*mockService, serviceStarted("InitLobby"));
 }
 
 void GenericLobbyTestSuite::TearDown()

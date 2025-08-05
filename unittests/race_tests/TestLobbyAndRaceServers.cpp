@@ -39,7 +39,7 @@ protected:
 TEST_F(TestLobbyAndRaceServers, init_two_servers)
 {
 	expects::ExpectAuxRaceInits();
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+	EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
 	MockCommInterface commRace;
 	RaceServer::AuxRaceServerObject raceServer(commRace);
 	CommMsgBody msgRaceInit;
@@ -47,7 +47,7 @@ TEST_F(TestLobbyAndRaceServers, init_two_servers)
 	EXPECT_EQ(1, fakeServer->serviceMap.size());
 
 	expects::ExpectLobbyInits();
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("InitLobby")));
+	EXPECT_CALL(*mockService, serviceStarted("InitLobby"));
 	MockCommInterface commLobby;
 	AuxLobbyServerObject lobbyServer(commLobby);
 	expects::ExpectLobbyConnects(lobbyServer);
@@ -59,7 +59,7 @@ TEST_F(TestLobbyAndRaceServers, init_two_servers)
 TEST_F(TestLobbyAndRaceServers, processPlayerSeated)
 {
 	expects::ExpectAuxRaceInits();
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+	EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
 	MockCommInterface commRace;
 	RaceServer::AuxRaceServerObject raceServer(commRace);
 	CommMsgBody msgRaceInit;
@@ -67,20 +67,20 @@ TEST_F(TestLobbyAndRaceServers, processPlayerSeated)
 
 
 	expects::ExpectLobbyInits();
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("InitLobby")));
+	EXPECT_CALL(*mockService, serviceStarted("InitLobby"));
 	MockCommInterface commLobby;
 	AuxLobbyServerObject lobbyServer(commLobby);
 	expects::ExpectLobbyConnects(lobbyServer);
 	CommMsgBody msgLobbyInit;
 	lobbyServer._safeInit(msgLobbyInit);
 
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GetXRates")));
+	EXPECT_CALL(*mockService, serviceStarted("GetXRates"));
 	raceServer.resumedInit();
 	EXPECT_TRUE(fakeConnection->connections.count("auxlobby"));
 
 	RaceServer::AuxLobbyConn lobby2race(&raceServer);
 
-	EXPECT_CALL(*fakeConnection, reversePostGMsg(StrEq("TB "), _, _)).WillOnce(
+	EXPECT_CALL(*fakeConnection, reversePostGMsg("TB ", _, _)).WillOnce(
 		Invoke([&](const std::string& traceMarker, UINT32 reqId, const Atf::MessageProtocol& msg)
 		{
 			auto* real_msg = dynamic_cast<const Lobby::Table::Protocol_AUX_LOBBY_MSG_A_PLAYER_SIT*>(&msg);
@@ -90,7 +90,7 @@ TEST_F(TestLobbyAndRaceServers, processPlayerSeated)
 		})
 		);
 
-	EXPECT_CALL(*fakeConnection, clientPostMsg(StrEq("RC_BIND"), _)).WillOnce(
+	EXPECT_CALL(*fakeConnection, clientPostMsg("RC_BIND", _)).WillOnce(
 		Invoke([&](const std::string& msgIdStr, const Atf::MessageProtocol& msg)
 		{	
             auto* real_msg = dynamic_cast<const RaceServer::Lobby::Protocol_AUX_RACE_MSG_Q_RACE_BIND*>(&msg);
@@ -99,12 +99,7 @@ TEST_F(TestLobbyAndRaceServers, processPlayerSeated)
             EXPECT_EQ(2, real_msg->userIntId);
             EXPECT_EQ(301, real_msg->tableId);
             EXPECT_EQ(2002, real_msg->loginSessionId);
-
-			auto factory = fakeConnection->connections["auxlobby"];
-			auto conn = factory->createConnection();
-			EXPECT_TRUE(conn != nullptr);
-			auto* raceConn = dynamic_cast<RaceServer::AuxLobbyConn*>(conn);
-			EXPECT_TRUE(raceConn != nullptr);
+            auto raceConn = fakeConnection->createConnection<RaceServer::AuxLobbyConn>("auxlobby");
 
 			CommMsgBody msgBody;
 			msg.composeMsg(msgBody);
@@ -112,7 +107,7 @@ TEST_F(TestLobbyAndRaceServers, processPlayerSeated)
 		})
 	);
 
-	EXPECT_CALL(*fakeConnection, serverPostMsg(StrEq("RC_BIND"), _, _)).WillOnce(
+	EXPECT_CALL(*fakeConnection, serverPostMsg("RC_BIND", _, _)).WillOnce(
 		Invoke([&](const std::string& msgIdStr, UINT32 reqId, const Atf::MessageProtocol& msg)
 		{
 			auto* reply = dynamic_cast<const RaceServer::Lobby::Protocol_AUX_RACE_MSG_A_RACE_BIND*>(&msg);

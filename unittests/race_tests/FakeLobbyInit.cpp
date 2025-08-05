@@ -6,6 +6,8 @@ void AuxLobbyServerObject::initCriticalComponents()
     AuxLobbyTableTypePtr tableType;
     tableType.assign(new AuxLobbyTableType());
     tableType->maxSeats = 8;
+    tableType->gameTypeId = 10;
+    tableType->variantType = 20;
     AuxLobbyTableDataPtr table;
     table.assign(new AuxLobbyTableData(this));
     table->tableId = 301;

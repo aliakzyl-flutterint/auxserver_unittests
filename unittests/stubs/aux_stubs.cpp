@@ -54,9 +54,6 @@ CommServerConnection* Atf::AtfCommObjectImpl::findConnectionById(UINT32 connId)
 void Atf::AtfCommObjectImpl::_processTimerMessage(UINT32 handle, UINT32 msgId, CommMsgBody& body)
 {
 }
-void Atf::AtfCommObjectImpl::registerConnectionFactory(const char* name, CommServerConnectionFactory& factory)
-{
-}
 
 void Atf::AtfCommObjectImpl::registerPlayerOrCipwaConnectionFactory(const char* name, Atf::AtfCommPlayerOrCipwaConnectionFactory& factory, bool supportCIPWA)
 {
@@ -191,9 +188,6 @@ void Atf::AtfCommServerConnection::postMsgWithId(UINT32 msgId, const MessageProt
 void Atf::AtfCommServerConnection::postGMsg(UINT32 reqId, UINT32 msgId, CommMsgBody& body)
 {}
 
-void Atf::AtfCommServerConnection::postGMsg(UINT32 reqId, const Atf::MessageProtocol& msg, bool trace /* = true */)
-{
-}
 
 void Atf::AtfCommServerConnection::traceOutgoing(UINT32 msgId, const CommMsgBody& body)
 { }

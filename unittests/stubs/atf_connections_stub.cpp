@@ -16,6 +16,10 @@ UINT32 Atf::AtfCommClientGConnection::postMsg(const Atf::MessageProtocol& msg, A
 	return 0;
 }
 
+void Atf::AtfCommServerConnection::postGMsg(UINT32 reqId, const Atf::MessageProtocol& msg, bool trace /* = true */)
+{
+}
+
 void Atf::AtfServerReverseGConnection::traceOutgoing(UINT32 msgId, const CommMsgBody& body, UINT32 serverReqId)
 {
 }
@@ -23,4 +27,8 @@ void Atf::AtfServerReverseGConnection::traceOutgoing(UINT32 msgId, const CommMsg
 CommServerConnection* Atf::AtfServerReverseGConnectionFactory::_AtfCommServerConnectionFactory::createConnection()
 {
 	return nullptr;
+}
+
+void Atf::AtfCommObjectImpl::registerConnectionFactory(const char* name, CommServerConnectionFactory& factory)
+{
 }

@@ -11,14 +11,17 @@ namespace Atf
     class AtfCommServerObject;
 }
 
+class CommServerConnectionFactory;
+
 class FakeConnection
 {
-    std::map<std::string, Atf::AtfCommServerConnection*> m_receivers;
 public:
+    std::map<std::string, CommServerConnectionFactory*> connections;
+
     friend Atf::AtfServerReverseGConnection;
-    void connectServices(const std::string& senderTraceMarker, Atf::AtfCommServerConnection* receiver);
-    MOCK_METHOD(void, postGMsg,(const std::string& traceMarker, UINT32 reqId, const Atf::MessageProtocol& msg));
-    MOCK_METHOD(void, postMsg, (const std::string& msgIdStr, const Atf::MessageProtocol& msg));
+    MOCK_METHOD(void, reversePostGMsg,(const std::string& traceMarker, UINT32 reqId, const Atf::MessageProtocol& msg));
+    MOCK_METHOD(void, clientPostMsg, (const std::string& msgIdStr, const Atf::MessageProtocol& msg));
+    MOCK_METHOD(void, serverPostMsg, (const std::string& msgIdStr, UINT32 reqId, const Atf::MessageProtocol& msg));
 };
 
 extern FakeConnection* fakeConnection;

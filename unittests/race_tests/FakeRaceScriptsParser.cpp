@@ -54,32 +54,84 @@ void deserializeCountries(const PString countries, std::vector<PString>& vectCou
 
 void deserializeCountries(const PString countries, std::set<PString, PStringCmp>& setCountries) {}
 
-void FakeRaceData::init(int getRaceId)
+//void FakeRaceData::init(int getRaceId)
+//{
+//	using namespace RaceDbm::RaceServer;
+//	using namespace aux;
+//
+//	for (const auto& [raceId, sessionIds] : m_races) {
+//		if (raceId != getRaceId)
+//			continue;
+//		RaceDetail rd;
+//		rd.race.raceId = raceId;
+//		rd.race.status = RaceStatus::RACE_STATUS_STARTED;
+//		rd.race.beginTime = CommUtcTime(beginTime);
+//        rd.race.plannedEndTime = CommUtcTime(plannedEndTime);
+//
+//		rd.race.raceTemplate.hosts = 1;
+//		rd.race.raceTemplate.sites = 1;
+//		rd.race.raceTemplate.clientPlatforms = 1;
+//		rd.race.raceTemplate.gameTemplate.gameType = 1;
+//		rd.race.raceTemplate.gameTemplate.variantType = 2;
+//		//rd.race.raceTemplate.raceTemplateId = 1;
+//		for (const auto& sessionId : sessionIds)
+//		{
+//			DbRaceSession race_session;
+//			race_session.raceId = raceId;
+//			race_session.raceSessionId = sessionId;
+//			dbmRaceSessions.raceSessions.push_back(race_session);
+//		}
+//		dbmRaces.races.push_back(rd);
+//	}
+//}
+
+void FakeRaceData::addDbmRace(int raceId)
 {
 	using namespace RaceDbm::RaceServer;
 	using namespace aux;
 
-	for (const auto& [raceId, sessionIds] : m_races) {
-		if (raceId != getRaceId)
-			continue;
-		RaceDetail rd;
-		rd.race.raceId = raceId;
-		rd.race.status = RaceStatus::RACE_STATUS_CREATED;
-		rd.race.beginTime = CommUtcTime(beginTime);
-        rd.race.plannedEndTime = CommUtcTime(plannedEndTime);
+	RaceDetail rd;
+	rd.race.raceId = raceId;
+	rd.race.status = RaceStatus::RACE_STATUS_STARTED;
+	rd.race.beginTime = CommUtcTime(beginTime);
+    rd.race.plannedEndTime = CommUtcTime(plannedEndTime);
 
-		rd.race.raceTemplate.gameTemplate.gameType = 1;
-		rd.race.raceTemplate.gameTemplate.variantType = 2;
-		//rd.race.raceTemplate.raceTemplateId = 1;
-		for (const auto& sessionId : sessionIds)
-		{
-			DbRaceSession race_session;
-			race_session.raceId = raceId;
-			race_session.raceSessionId = sessionId;
-			dbmRaceSessions.raceSessions.push_back(race_session);
-		}
-		dbmRaces.races.push_back(rd);
-	}
+	rd.race.raceTemplate.hosts = 1;
+	rd.race.raceTemplate.sites = 1;
+	rd.race.raceTemplate.clientPlatforms = 1;
+	rd.race.raceTemplate.gameTemplate.gameType = 1;
+	rd.race.raceTemplate.gameTemplate.variantType = 2;
+	//rd.race.raceTemplate.raceTemplateId = 1;
+	dbmRaces.races.push_back(rd);
+}
+
+aux::Race FakeRaceData::createRace(int raceId)
+{
+	using namespace aux;
+    Race raceObj;
+    raceObj.raceId = raceId;
+	raceObj.status = RaceStatus::RACE_STATUS_NONE;
+	raceObj.beginTime = CommUtcTime(beginTime);
+	raceObj.plannedEndTime = CommUtcTime(plannedEndTime);
+
+	raceObj.raceTemplate.hosts = 1;
+	raceObj.raceTemplate.sites = 1;
+	raceObj.raceTemplate.clientPlatforms = 1;
+	raceObj.raceTemplate.gameTemplate.gameType = 1;
+	raceObj.raceTemplate.gameTemplate.variantType = 2;
+    return raceObj;
+}
+
+RaceServer::Lobby::Protocol_AUX_RACE_MSG_Q_RACE_OPTIN_4_PLAY FakeRaceData::createOptUser(int raceId, int userId)
+{
+    using namespace RaceServer::Lobby;
+	Protocol_AUX_RACE_MSG_Q_RACE_OPTIN_4_PLAY rqst;
+	rqst.hostId = 1;
+	rqst.siteId = 1;
+	rqst.clientPlatformId = 1;
+	rqst.raceId = raceId;
+    rqst.userIntId = userId;
+	return rqst;
 }
 
 Atf::Timer* Atf::AtfCommObjectImpl::getDefaultTimer()

@@ -7,6 +7,7 @@ set(UNITTESTS_PATH ..)
 
 set(LOBBY_TEST_FILES
 ${UNITTESTS_PATH}/common/GenericServerObjectSuite.cpp
+${UNITTESTS_PATH}/common/ServerObjectsExpects.cpp
 GenericLobbyTestSuite.cpp
 TestAuxLobbyServerObject.cpp
 TestAuxGameRestriction.cpp
@@ -21,6 +22,7 @@ ${STUBS_PATH}/plib_stubs.cpp
 ${STUBS_PATH}/protocols_stubs.cpp
 ${STUBS_PATH}/aux_stubs.cpp
 ${STUBS_PATH}/atf_stubs.cpp
+${STUBS_PATH}/atf_connections_stub.cpp
 ${STUBS_PATH}/atf1_stubs.cpp
 ${STUBS_PATH}/AtfCommObjectImpl_stubs.cpp
 ${STUBS_PATH}/lobby_stubs.cpp
@@ -30,6 +32,7 @@ set(FAKE_FILES
 ${FAKES_PATH}/auxservercommon/FakeAuxCommServerObject.cpp
 ${FAKES_PATH}/auxservercommon/FakeAuxReefAccessor.cpp
 ${FAKES_PATH}/atf/FakeServer.cpp
+${FAKES_PATH}/lobby/FakeLobby.cpp
 )
 
 set(MOCK_FILES

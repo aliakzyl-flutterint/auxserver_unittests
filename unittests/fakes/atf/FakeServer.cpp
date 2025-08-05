@@ -23,6 +23,13 @@ void FakeServer::triggerOnReply2(const std::string& serviceName, unsigned int ms
 	service->safeProcessMessage(msgId, msg);
 }
 
+void FakeServer::triggerOnReply3(const std::string& serviceName, unsigned int msgId, const CommMsgBody& msg)
+{
+	auto& service = serviceMap[serviceName];
+	service->directGoToNewState(4);
+	service->safeProcessMessage(msgId, msg);
+}
+
 void FakeServer::triggerOnExit(const std::string& serviceName)
 {
 	auto& service = serviceMap[serviceName];
@@ -63,7 +70,7 @@ void Atf::Service::startService()
 	//CommMsgBody msg;
 	//this->processMessage(0, msg);
 	fakeServer->addService(this->serviceNameBase.c_str(), this);
-	mockService->serviceStarted(this->serviceNameBase);
+	mockService->serviceStarted(this->serviceNameBase.c_str());
 }
 
 UINT32 Atf::Service::startTimerMSec(UINT32 msgId, INT32 timeOutInMSec)

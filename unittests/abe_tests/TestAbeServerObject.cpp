@@ -154,7 +154,7 @@ TEST_F(TestAbeServerObject, issueBonusToPlayer_bonus_issued)
 {
 	expectInitCalls();
 
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+	EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
 
 	MockCommInterface mockCommInterface;
 	AbeServerObject serverObject(mockCommInterface);
@@ -190,7 +190,7 @@ TEST_F(TestAbeServerObject, issueBonusToPlayer_bonus_rejected)
 {
 	expectInitCalls();
 
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+	EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
 
 	MockCommInterface mockCommInterface;
 	AbeServerObject serverObject(mockCommInterface);
@@ -226,7 +226,7 @@ TEST_F(TestAbeServerObject, issueBonusToPlayer_day_change_ahead_issued)
 {
 	expectInitCalls();
 
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+	EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
 
 	MockCommInterface mockCommInterface;
 	AbeServerObject serverObject(mockCommInterface);
@@ -264,7 +264,7 @@ TEST_F(TestAbeServerObject, issueBonusToPlayer_day_change_delayed_rejected)
 {
 	expectInitCalls();
 
-	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
+	EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
 
 	MockCommInterface mockCommInterface;
 	AbeServerObject serverObject(mockCommInterface);
@@ -302,8 +302,8 @@ TEST_F(TestAbeServerObject, issueBonusToPlayer_day_change_delayed_rejected)
 //{
 //	expectInitCalls();
 //
-//	EXPECT_CALL(*mockService, serviceStarted(StrEq("GADFDB")));
-//	EXPECT_CALL(*mockService, serviceStarted(StrEq("SotdSpin")));
+//	EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
+//	EXPECT_CALL(*mockService, serviceStarted("SotdSpin"));
 //
 //	MockCommInterface mockCommInterface;
 //	AbeServerObject serverObject(mockCommInterface);

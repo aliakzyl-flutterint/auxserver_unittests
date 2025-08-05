@@ -26,10 +26,11 @@ void GenericServerObjectSuite::SetUp()
 	mockPIniFile = new MockPIniFile();
 	mockAtfCommObjectImpl = new MockAtfCommObjectImpl();
 	mockServerStartParams = new MockServerStartParams();
+	mockAuxReefAccessor = new MockAuxReefAccessor();
 
 		
 	EXPECT_CALL(*mockServerStartParams,
-		parseServerStartParams(_, _, _)).WillOnce(
+		parseServerStartParams(_, _, _)).WillRepeatedly(
 			Invoke([this](ServerStartParams* serverStartParams, CommMsgParser& parser, const char* iniFileName_)
 				{
 					serverStartParams->fullIniFileName = this->iniFileName.c_str();
@@ -39,8 +40,7 @@ void GenericServerObjectSuite::SetUp()
 
 	ExpectInit();
 
-	EXPECT_CALL(*mockAuxReefAccessor, init(_));
-
+	EXPECT_CALL(*mockAuxReefAccessor, init(_)).Times(AtLeast(1));
 }
 
 void GenericServerObjectSuite::TearDown()
@@ -69,5 +69,11 @@ void GenericServerObjectSuite::TearDown()
 	{
 		delete mockServerStartParams;
 		mockServerStartParams = nullptr;
+	}
+
+	if (mockAuxReefAccessor)
+	{
+		delete mockAuxReefAccessor;
+		mockAuxReefAccessor = nullptr;
 	}
 }

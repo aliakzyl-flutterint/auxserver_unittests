@@ -1,6 +1,5 @@
 #include "AtfCipwaConn.h"
 #include "AtfCommServerObject.h"
-#include "AtfCommServerGConn.h"
 #include "AtfCommPlayerConns.h"
 #include "Service.h"
 #include "telemetry/gateway/client.h"
@@ -53,9 +52,6 @@ CommServerConnection* Atf::AtfCommObjectImpl::findConnectionById(UINT32 connId)
 }
 
 void Atf::AtfCommObjectImpl::_processTimerMessage(UINT32 handle, UINT32 msgId, CommMsgBody& body)
-{
-}
-void Atf::AtfCommObjectImpl::registerConnectionFactory(const char* name, CommServerConnectionFactory& factory)
 {
 }
 
@@ -129,11 +125,6 @@ Atf::AtfCommClientGConnection::~AtfCommClientGConnection()
 void Atf::AtfCommClientGConnection::setTraceMarker(const char* newTraceMarker)
 {}
 
-UINT32 Atf::AtfCommClientGConnection::postMsg(const Atf::MessageProtocol& msg, AsyncCall* call /* = 0 */, bool trace /* = true */)
-{
-	return 0;
-}
-
 void Atf::AtfCommClientGConnection::traceOutgoing(UINT32 msgId, UINT32 reqId)
 {
 }
@@ -197,9 +188,6 @@ void Atf::AtfCommServerConnection::postMsgWithId(UINT32 msgId, const MessageProt
 void Atf::AtfCommServerConnection::postGMsg(UINT32 reqId, UINT32 msgId, CommMsgBody& body)
 {}
 
-void Atf::AtfCommServerConnection::postGMsg(UINT32 reqId, const Atf::MessageProtocol& msg, bool trace /* = true */)
-{
-}
 
 void Atf::AtfCommServerConnection::traceOutgoing(UINT32 msgId, const CommMsgBody& body)
 { }
@@ -234,26 +222,6 @@ void Atf::AtfCommServerConnection::_traceDisconnected(int errCode, const char* e
 
 Atf::ServiceReplyWaitableOnReliableConnection::ServiceReplyWaitableOnReliableConnection()
 {
-}
-
-void Atf::AtfServerReverseGConnection::connected()
-{
-}
-
-void Atf::AtfServerReverseGConnection::closedOrDisconnected(int errCode, const char* errMsg)
-{
-}
-void Atf::AtfServerReverseGConnection::postGMsg(UINT32 reqId, const Atf::MessageProtocol& msg)
-{
-}
-
-void Atf::AtfServerReverseGConnection::traceOutgoing(UINT32 msgId, const CommMsgBody& body, UINT32 serverReqId)
-{
-}
-
-CommServerConnection* Atf::AtfServerReverseGConnectionFactory::_AtfCommServerConnectionFactory::createConnection()
-{
-	return nullptr;
 }
 
 void Atf::Service::setServiceReturnMsg(UINT32 resMsgId, CommMsgBody& resMsg)

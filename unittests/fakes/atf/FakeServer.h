@@ -17,6 +17,7 @@ public:
 	void addService(const std::string& serviceName, Atf::Service* service);
 	void triggerOnReply(const std::string& serviceName, unsigned int msgId, const CommMsgBody& msg);
 	void triggerOnReply2(const std::string& serviceName, unsigned int msgId, const CommMsgBody& msg);
+	void triggerOnReply3(const std::string& serviceName, unsigned int msgId, const CommMsgBody& msg);
 	void triggerOnExit(const std::string& serviceName);
 
 	ServiceMap serviceMap;

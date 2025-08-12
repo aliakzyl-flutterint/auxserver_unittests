@@ -70,6 +70,7 @@ void expects::ExpectLobbyInits()
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "initStatusPpwr"));
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "initStatusSbm"));
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "initStatusFd"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "initStatusPsm"));
 
 	// Expected some non-empty strings
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "tableDbmAddress")).WillRepeatedly(Return(defaultValue.c_str()));

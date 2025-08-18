@@ -380,6 +380,14 @@ void Atf::SimpleServiceClazz::directGotoNewState(int newState)
 {
 }
 
+void Atf::SimpleServiceClazz::directGotoNewState(int newState, UINT32 msgId)
+{
+}
+
+void Atf::SimpleServiceClazz::directGotoNewState(int newState, UINT32 msgId, CommMsgBody& msgBody)
+{
+}
+
 UINT32 Atf::SimpleServiceClazz::waitServiceCondition(ServiceCondition* cond)
 {
 	return 0;

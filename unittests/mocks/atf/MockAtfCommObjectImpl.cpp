@@ -25,3 +25,8 @@ void Atf::AtfCommObjectImpl::_reportPanopticMetrics(IPanopticLogger& panopticLog
 {
 	mockAtfCommObjectImpl->reportPanopticMetrics(objectTag, stationName);
 }
+
+bool Atf::AtfCommObjectImpl::postMessageToClientG(UINT32 connId, const UINT32 reqId, const Atf::MessageProtocol& msg, bool trace)
+{
+	return mockAtfCommObjectImpl->postMessageToClientG(connId, reqId);
+}

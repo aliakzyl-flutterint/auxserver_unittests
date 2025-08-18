@@ -42,7 +42,7 @@ ${MOCKS_PATH}/plib/MockPIniFile.cpp
 set(PRODUCTION_FILES
     ${AUX_PATH}/auxjackpotserver/JackpotServerObject.cpp
 	${AUX_PATH}/auxservercommon/AuxCommServerObject.cpp
-	${PRODUCTION_BASE_PATH}/atf/PerformanceCounter.cpp
+	${ATF_PATH}/PerformanceCounter.cpp
 )
 
 set (PROTOCOL_FILES

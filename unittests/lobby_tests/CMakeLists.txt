@@ -88,7 +88,7 @@ set (PROTOCOL_FILES
 )
 
 set(AUX_FILES
-#${AUX_PATH}/auxcommon/auxgenerictypes.cpp
+#${ATF_PATH}/AtfUtility.cpp
 )
 
 set(COMMLIB_FILES

@@ -39,9 +39,51 @@ void UniqueSequenceNumber::init(Atf::AtfCommObjectImpl* obj_, Atf::AtfCommClient
 {
 }
 
+void UniqueSequenceNumber::init(Atf::AtfCommObjectImpl* obj_, Atf::AtfCommClientGConnection* conn_, UINT32 blockModeThreshold, UINT32 preFetchThreshold, UINT32 fetchSize)
+{ }
+
 void TableScriptParser2::getJackpotKeys(const vector< aux::P_PNameValue >& props, vector<UINT32>& jpKeys)
 {
 }
+
+void TableScriptParser2::loadScript(const PString& script, const PString& targetEnvironment)
+{
+}
+
+std::vector<aux::P_PNameValue> TableScriptParser2::parseScript(const aux::TableTemplateDef& tableTemplateDef,
+	const PIniFile::Section* tableParams, aux::TableTypeDef& tableTypeDO, UINT32 sectionindex)
+{
+	return std::vector<aux::P_PNameValue>();
+}
+
+void TableScriptParser2::parseTemplateScript(const PIniFile::Section& templateSection, aux::TableTemplateDef& templateDO, const std::vector<aux::XclGameVariant>& gameVariants)
+{ }
+
+void TableScriptParser2::parseTemplateGlobalScript(PIniFile& scriptFile, std::set<PString, PStringCmp>& gameDevelopers, std::set<PString, PStringCmp>& biGameSegments)
+{ }
+
+void TableScriptParser2::parseJackpotScript(const PIniFile::Section& jackpotSection, aux::JpSettings& jpSettingsDO)
+{ }
+
+void TableScriptParser2::parseVendorScript(const PIniFile::Section& templateSection, aux::XclVendor& xclVendorDO)
+{ }
+
+void TableScriptParser2::parseGameTypeScript(const PIniFile::Section& templateSection, aux::XclGame& xclGameDO)
+{ }
+
+void TableScriptParser2::parseGameVariantScript(const PIniFile::Section& templateSection, const std::set<PString, PStringCmp>& gameDevelopers, const std::set<PString, PStringCmp>& biGameSegments, aux::XclGameVariant& xclGameVariantDO)
+{ }
+
+std::string TableScriptParser2::getPropertyFromDefaults(const PIniFile::Section* sec, std::string key) const
+{
+	return "";
+}
+
+void TableScriptParser2::validatePPBGameGenericSettings(UINT32 hosts, UINT64 sites, const PString& currency)
+{ }
+
+void TableScriptParser2::validateFDGameSettings(const aux::TableTypeDef& tableTypeDO)
+{ }
 
 const char* const Atf::AtfCommPlayerOrCipwaConnection::cipwaConnTyeSuffix = "_cipwa";
 

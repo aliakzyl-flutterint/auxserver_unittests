@@ -29,6 +29,16 @@ CommClientConnection::~CommClientConnection()
 }
 
 
+int CommServerConnection::connPathLen() const
+{
+	return 0;
+}
+
+const char* CommServerConnection::connPathPoint(int i) const
+{
+	return "";
+}
+
 bool CommClientConnection::closedOrDisconnected(int errCode, const char* errMsg)
 {
 	return true;
@@ -88,6 +98,10 @@ void CommClientGConnection::cancelPost(UINT32 requestId)
 }
 
 void CommClientGConnection::reserve(UINT32 size)
+{
+}
+
+void CommClientGConnection::_clearAll()
 {
 }
 
@@ -154,4 +168,10 @@ void CommSSL::generateRandomBytes(BYTE* buf, size_t sz)
 { }
 
 void CommSSLSystemInfo::encodePasswordEx(PString& ret, int encodingId, const char* passwrd)
+{ }
+
+void CommSSLBase64::encode(PString& ret, const BYTE* p, size_t sz, int lineLen, bool urlSafe)
+{}
+
+void CommSSLBase64::decode(PBlock& ret, const char* s, size_t sz)
 { }

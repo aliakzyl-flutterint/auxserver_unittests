@@ -2,7 +2,12 @@
 
 #include <gmock/gmock.h>
 
-class pokerstars::commlib::ServerStartParams;
+namespace pokerstars {
+    namespace commlib {
+        class ServerStartParams;
+    }
+}
+	
 
 class MockServerStartParams
 {

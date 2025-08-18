@@ -1,7 +1,10 @@
 
 #include "GenericServerObjectSuite.h"
 
-#include <AuxLobbyServerObject.h>
+#include "commmsgbody.h"
+#include "ServerStartParams.h"
+
+//#include <AuxLobbyServerObject.h>
 #include "commlib2a/MockServerStartParams.h"
 #include "plib/MockPIniFile.h"
 #include "atf/MockAtfCommObjectImpl.h"

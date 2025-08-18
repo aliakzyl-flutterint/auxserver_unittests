@@ -1,6 +1,6 @@
 #include "ServerObjectsExpects.h"
 
-#include "AuxLobbyServerObject.h"
+#include "auxlobby/AuxLobbyServerObject.h"
 #include "atf/MockAtfCommObjectImpl.h"
 #include "plib/MockPIniFile.h"
 

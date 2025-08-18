@@ -65,3 +65,6 @@ void AuxReefAccessor::sendEvent(UINT32 eventType, const Atf::BigSharedMsgBody& b
 void AuxReefAccessor::sendEvent(const Atf::MessageProtocol& evt)
 {
 }
+
+void AuxStateAccessor::restoreState(const RestoreDoneCallback& callback)
+{ }

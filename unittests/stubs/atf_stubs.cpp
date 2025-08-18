@@ -12,6 +12,11 @@ UINT32 Atf::AtfUtil::getAndSkipReqId(const CommMsgBody& body)
 	return 0;
 }
 
+time_t Atf::AtfUtil::convertUTCSrvTimeToUnixTime(const CommSrvTime& t)
+{
+    return 0;
+}
+
 Atf::AtfPropertyPublisher::AtfPropertyPublisher()
 {
 }

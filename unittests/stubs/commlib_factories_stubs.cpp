@@ -2,6 +2,7 @@
 #include "auxcommon/CommGrdHostAuth.h"
 #include "auxcommon/CommGrdAuxToken.h"
 #include "commgrdnull.h"
+#include "commgrdppwdsid.h"
 
 CommServerGuard* CommServerNullWithInfoGuardFactory::createGuard(const vector< const char* >& guardNames)
 {
@@ -48,4 +49,9 @@ void CommClientNullGuardFactory::composeGuardNameList(CommMsgBody& msgBody) cons
 CommClientGuard* CommClientNullGuardFactory::createGuard(const char* guardName, CommClientGuardAuth* auth_)
 {
 	return nullptr;
+}
+
+CommServerGuard* CommServerPlainTextPasswordSidGuardFactory::createGuard(const vector< const char* >& guardNames)
+{
+    return nullptr;
 }

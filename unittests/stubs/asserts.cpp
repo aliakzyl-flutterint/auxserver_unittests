@@ -2,6 +2,8 @@
 #include <iostream>
 #include <cstdarg>
 
+#include "Service.h"
+
 PAssert::PAssert(const char* cond, const char* file, int line)
 {	
 	std::cout << "Assertion failed: " << cond << "\n"
@@ -68,4 +70,18 @@ void myPLogDebug_internal(const char* format, ...)
 	printf("\n");
 	va_end(args);
 	std::cout << std::endl;
+}
+
+void Atf::Service::myPLogInBound(const Atf::MessageProtocol& prot) const
+{
+	PString buff;
+	prot.asTraceString(buff);
+	myPLog("<< %s", buff.c_str());
+}
+
+void Atf::Service::myPLogOutBound(const Atf::MessageProtocol& prot) const
+{
+	PString buff;
+	prot.asTraceString(buff);
+	myPLog(">> %s", buff.c_str());
 }

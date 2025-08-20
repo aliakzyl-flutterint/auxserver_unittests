@@ -43,7 +43,7 @@ void GenericServerObjectSuite::SetUp()
 
 	ExpectInit();
 
-	EXPECT_CALL(*mockAuxReefAccessor, init(_)).Times(AtLeast(1));
+	EXPECT_CALL(*mockAuxReefAccessor, init(_)).Times(AtLeast(min_num_servlets));
 }
 
 void GenericServerObjectSuite::TearDown()

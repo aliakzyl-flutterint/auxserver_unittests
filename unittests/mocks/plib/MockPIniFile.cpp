@@ -27,8 +27,15 @@ PIniFile::Section* PIniFile::getSection(const char* secName)
 {
 	auto retval = new PIniFile::Section;
 	retval->name = PString(secName);
-	mockPIniFile->getSection(this, secName, retval);
-	return retval;
+	bool overloaded = mockPIniFile->getSection(this, secName, retval);
+    if (!overloaded)
+    {
+		return retval;
+    }
+    else {
+        delete retval;
+        return nullptr;
+    }
 }
 
 int PIniFile::Section::getIntProperty(const char* name_, int defaultValue) const

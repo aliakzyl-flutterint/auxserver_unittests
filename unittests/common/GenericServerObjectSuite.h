@@ -6,7 +6,8 @@
 class GenericServerObjectSuite : public ::testing::Test
 {
 protected:
-	
+	int min_num_servlets = 0;
+    
 	void SetUp() override;
 	void TearDown() override;
 

@@ -148,13 +148,6 @@ void expects::ExpectISInits()
 	EXPECT_CALL(*mockPIniFile, getSection(_, "STATICSETTINGS", _)).Times(AtLeast(1));
 	EXPECT_CALL(*mockPIniFile, getSection(_, "DYNAMICSETTINGS", _)).Times(AtLeast(1));
 	EXPECT_CALL(*mockPIniFile, getSection(_, "STATICCONNECT", _)).Times(AtLeast(1));
-	//EXPECT_CALL(*mockPIniFile, getSection(_, "CLIENTCONNINFO", _)).Times(AtLeast(1));
-	//EXPECT_CALL(*mockPIniFile, getSection(_, "DYNAMICCONNECT", _)).Times(AtLeast(1));
-	//EXPECT_CALL(*mockPIniFile, getSection(_, "TABLEPLACEMENTRULES", _)).Times(AtLeast(1));
-	//EXPECT_CALL(*mockPIniFile, getSection(_, "SPINDELAYSETTINGS", _)).Times(AtLeast(1));
-	//EXPECT_CALL(*mockPIniFile, getSection(_, "DISABLEDSPINFEATURESSETTINGS", _)).Times(AtLeast(1));
-	//EXPECT_CALL(*mockPIniFile, getSection(_, "GERMANYBREAKSETTINGS", _)).Times(AtLeast(1));
-	//EXPECT_CALL(*mockPIniFile, getSection(_, "PRIZEGAME", _)).Times(AtLeast(1));
 
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "myId"));
     EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "RunningMode")).WillRepeatedly(Return("ForLoginOnly"));
@@ -189,6 +182,85 @@ void expects::ExpectISInits()
     EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "FailableMaxRetryInterval"));
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "ForceValidateWebToken"));
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "EnableReefState"));
+}
+
+void expects::ExpectAdminInits()
+{
+	EXPECT_CALL(*mockPIniFile, getSection(_, "STATICSETTINGS", _)).Times(AtLeast(1));
+	EXPECT_CALL(*mockPIniFile, getSection(_, "DYNAMICSETTINGS", _)).Times(AtLeast(1));
+	EXPECT_CALL(*mockPIniFile, getSection(_, "STATICCONNECT", _)).Times(AtLeast(1));
+    EXPECT_CALL(*mockPIniFile, getSection(_, "LOGINDBM", _)).WillRepeatedly(Return(true));
+    EXPECT_CALL(*mockPIniFile, getSection(_, "DYNAMICCONNECT", _)).Times(AtLeast(1));
+    EXPECT_CALL(*mockPIniFile, getSection(_, "stuckSessionsNotify", _)).Times(AtLeast(1));
+    EXPECT_CALL(*mockPIniFile, getSection(_, "stuckSessionsNotify.", _)).WillRepeatedly(Return(true));
+
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "myId"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "dynamicLogLevel"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "TargetEnvironment"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "lobbyServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "lobbyServerInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "mainDBServerAddress")).WillRepeatedly(Return(dbmAddress.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "mainDBServerInstance")).WillRepeatedly(Return(dbmInstance.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "sharedMainDBServerAddress")).WillRepeatedly(Return(dbmAddress.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "sharedMainDBServerInstance")).WillRepeatedly(Return(dbmInstance.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "idDbmAddress")).WillRepeatedly(Return(idDbmAddress.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "idDbmInstance")).WillRepeatedly(Return(idDbmInstance.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "jackpotServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "jackpotServerInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "roOlapDbmServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "roOlapDbmServerInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "integrationServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "integrationServerInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AamsIntegrationServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AamsIntegrationServerInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "aamsGateWayServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "aamsGateWayServerInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "rgRouterServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "rgRouterInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "roOltpServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "roOltpServerInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "roSharedOltpServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "roSharedOltpServerInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "tableDbmServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "tableDbmServerInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "itTableDbmServerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "itTableDbmServerInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("LOGINDBM", "loginDbmAddress")).WillRepeatedly(Return(dbmAddress.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("LOGINDBM", "loginDbmInstance")).WillRepeatedly(Return(dbmInstance.c_str()));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("LOGINDBM", "roOltpDbmAddress")).WillRepeatedly(Return(roOltpDbmAddress.c_str()));
+
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "auxCommonModuleAddress1"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "auxCommonModuleInstance1"));
+
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "HandHistoryServerAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "HandHistoryServerInstance"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "templateServerAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "templateServerInstance"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "emailServerAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "emailServerInstance"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "raceSchedulerAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "raceSchedulerInstance"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "raceDbmAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "raceDbmInstance"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "cdlDbmAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "cdlDbmInstance"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "cdlDbmAddress2"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "cdlDbmInstance2"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "abeServerAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "abeServerInstance"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "auxTriggerAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "auxTriggerInstance"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "fastGatewayCcmsAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICCONNECT", "fastGatewayCcmsInstance"));
+
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "admin.name"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "admin.id"));
+    EXPECT_CALL(*mockPIniFile, getSectionIntProperty("DYNAMICSETTINGS", "TtUploadBatchSize", _));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "WhenToExpireUFG"));
+	EXPECT_CALL(*mockPIniFile, getSectionIntProperty("DYNAMICSETTINGS", "MaxPtHandDetailsLength", _));
+
 }
 
 void expects::ExpectLobbyConnects(AuxLobbyServerObject& tstObj)

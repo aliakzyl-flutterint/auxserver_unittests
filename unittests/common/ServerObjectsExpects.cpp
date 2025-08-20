@@ -143,6 +143,54 @@ void expects::ExpectLobbyInits()
 	EXPECT_CALL(*mockPIniFile, getSectionIntProperty(_, "maxGamesPerPlayer.FD", _));
 }
 
+void expects::ExpectISInits()
+{
+	EXPECT_CALL(*mockPIniFile, getSection(_, "STATICSETTINGS", _)).Times(AtLeast(1));
+	EXPECT_CALL(*mockPIniFile, getSection(_, "DYNAMICSETTINGS", _)).Times(AtLeast(1));
+	EXPECT_CALL(*mockPIniFile, getSection(_, "STATICCONNECT", _)).Times(AtLeast(1));
+	//EXPECT_CALL(*mockPIniFile, getSection(_, "CLIENTCONNINFO", _)).Times(AtLeast(1));
+	//EXPECT_CALL(*mockPIniFile, getSection(_, "DYNAMICCONNECT", _)).Times(AtLeast(1));
+	//EXPECT_CALL(*mockPIniFile, getSection(_, "TABLEPLACEMENTRULES", _)).Times(AtLeast(1));
+	//EXPECT_CALL(*mockPIniFile, getSection(_, "SPINDELAYSETTINGS", _)).Times(AtLeast(1));
+	//EXPECT_CALL(*mockPIniFile, getSection(_, "DISABLEDSPINFEATURESSETTINGS", _)).Times(AtLeast(1));
+	//EXPECT_CALL(*mockPIniFile, getSection(_, "GERMANYBREAKSETTINGS", _)).Times(AtLeast(1));
+	//EXPECT_CALL(*mockPIniFile, getSection(_, "PRIZEGAME", _)).Times(AtLeast(1));
+
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "myId"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "RunningMode")).WillRepeatedly(Return("ForLoginOnly"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "CancelBetEnabled"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "dynamicLogLevel"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "isaAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "isaInstance"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "IsDbmAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "IsDbmInstance")).Times(2);
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "DbmAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "DbmInstance"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "idDbmAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "idDbmInstance")).WillRepeatedly(Return(defaultValue.c_str()));
+
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AuxTriggerAddress")).WillRepeatedly(Return(defaultValue.c_str()));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AuxTriggerInstance"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AdaptorAddressSimPS"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AdaptorInstanceSimPS"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AdaptorAddressPS"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AdaptorInstancePS"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AdaptorAddressSBG"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AdaptorInstanceSBG"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AdaptorAddressPPB"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AdaptorInstancePPB"));
+
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "WebGatewayAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "WebGatewayInstance"));
+
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "ResubmitIntervalSec"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "ResetSuspendedInterval"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "FailableMaxRetryTimes"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "FailableMaxRetryInterval"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "ForceValidateWebToken"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "EnableReefState"));
+}
+
 void expects::ExpectLobbyConnects(AuxLobbyServerObject& tstObj)
 {
 	tstObj.staticConfig.staticConnect.dbmAddress.set(dbmAddress.c_str());

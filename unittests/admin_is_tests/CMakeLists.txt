@@ -151,6 +151,7 @@ ${PLIB_FILES}
 )
 
 target_include_directories(adminis_unittests AFTER PRIVATE
+${AUX_PATH}/auxintegrationserver
 ${COMMLIB_PATH}
 ${PRODUCTION_BASE_PATH}/atf
 ${PRODUCTION_BASE_PATH}/db2_libs/CLI9/include

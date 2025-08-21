@@ -1,5 +1,6 @@
 #include "FakeServer.h"
 #include "atf/MockService.h"
+
 #include "Service.h"
 
 namespace
@@ -24,6 +25,12 @@ void FakeServer::sendRequest(const std::string& serviceName)
 	CommMsgBody emptyMsg;
     service->directGoToNewState(Atf::BASE_SERVICE_STATES::INIT_STATE);
 	service->safeProcessMessage(0, emptyMsg);
+}
+
+void FakeServer::nextStep(const std::string& serviceName, unsigned int msgId, const CommMsgBody& msg)
+{
+	auto& service = serviceMap[serviceName];
+	service->safeProcessMessage(msgId, msg);
 }
 
 void FakeServer::triggerOnReply(const std::string& serviceName, unsigned int msgId, const CommMsgBody& msg)
@@ -83,9 +90,6 @@ void Atf::Service::safeProcessMessage(UINT32 msgId, const CommMsgBody& msg)
 
 void Atf::Service::startService()
 {
-	//this->directGoToNewState(3);
-	//CommMsgBody msg;
-	//this->processMessage(0, msg);
 	fakeServer->addService(this->serviceNameBase.c_str(), this);
 	mockService->serviceStarted(this->serviceNameBase.c_str());
 }
@@ -129,4 +133,12 @@ UINT32 Atf::Service::sendMsgToServer(AtfCommClientGConnectionEx& conn, const Atf
 	msg.composeMsg(body);
 
 	return sendMsgToServer(conn, msg.getMsgId(), body);
+}
+
+void Atf::Service::postMsgToGClient(UINT32 connId, UINT32 reqId, const Atf::MessageProtocol& msg, bool trace /* = true */)
+{
+	CommMsgBody body;
+	msg.composeMsg(body);
+	std::string serviceName = this->serviceNameBase.c_str();
+	mockService->postMsgToGClient(serviceName, reqId, body);
 }

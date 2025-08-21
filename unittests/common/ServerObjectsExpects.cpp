@@ -150,7 +150,7 @@ void expects::ExpectISInits()
 	EXPECT_CALL(*mockPIniFile, getSection(_, "STATICCONNECT", _)).Times(AtLeast(1));
 
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "myId"));
-    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "RunningMode")).WillRepeatedly(Return("ForLoginOnly"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "RunningMode")).WillRepeatedly(Return("ForGameOnly"));
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICSETTINGS", "CancelBetEnabled"));
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "dynamicLogLevel"));
     EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "isaAddress")).WillRepeatedly(Return(defaultValue.c_str()));
@@ -173,14 +173,13 @@ void expects::ExpectISInits()
     EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AdaptorAddressPPB"));
     EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "AdaptorInstancePPB"));
 
-	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "WebGatewayAddress"));
-    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "WebGatewayInstance"));
+	EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "NotificationServerAddress"));
+    EXPECT_CALL(*mockPIniFile, getSectionProperty("STATICCONNECT", "NotificationServerInstance"));
 
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "ResubmitIntervalSec"));
     EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "ResetSuspendedInterval"));
     EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "FailableMaxRetryTimes"));
     EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "FailableMaxRetryInterval"));
-	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "ForceValidateWebToken"));
 	EXPECT_CALL(*mockPIniFile, getSectionProperty("DYNAMICSETTINGS", "EnableReefState"));
 }
 

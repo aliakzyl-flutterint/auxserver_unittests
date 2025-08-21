@@ -43,6 +43,12 @@ UINT32 Atf::AtfCommClientGConnection::post(UINT32 msgId, CommMsgBody& body, Asyn
     return fakeConnection->post(traceMarker, msgId, body);
 }
 
+void Atf::AtfCommServerConnection::post(UINT32 msgId, CommMsgBody& body)
+{
+	std::string traceMarker(this->_traceMarker.c_str());
+	fakeConnection->post(traceMarker, msgId, body);
+}
+
 void Atf::AtfServerReverseGConnection::traceOutgoing(UINT32 msgId, const CommMsgBody& body, UINT32 serverReqId)
 {
 }
@@ -50,4 +56,9 @@ void Atf::AtfServerReverseGConnection::traceOutgoing(UINT32 msgId, const CommMsg
 CommServerConnection* Atf::AtfServerReverseGConnectionFactory::_AtfCommServerConnectionFactory::createConnection()
 {
 	return nullptr;
+}
+
+CommServerConnection* Atf::AtfCommObjectImpl::findConnectionById(UINT32 connId)
+{
+	return fakeConnection->findConnection(this->logPrefixString.c_str());
 }

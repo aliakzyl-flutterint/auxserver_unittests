@@ -37,3 +37,12 @@ UINT32 Atf::AtfCommClientGConnection::post(UINT32 msgId, CommMsgBody& body, Asyn
 {
 	return 0;
 }
+
+void Atf::AtfCommServerConnection::post(UINT32 msgId, CommMsgBody& body)
+{
+}
+
+CommServerConnection* Atf::AtfCommObjectImpl::findConnectionById(UINT32 connId)
+{
+	return nullptr;
+}

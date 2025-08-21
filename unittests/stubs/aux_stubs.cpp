@@ -46,11 +46,6 @@ void Atf::AtfCommObjectImpl::onTimer(UINT32 handle, UINT32 msgId, const CommMsgB
 void Atf::AtfCommObjectImpl::_processMessage(_CommMsg& msg)
 { }
 
-CommServerConnection* Atf::AtfCommObjectImpl::findConnectionById(UINT32 connId)
-{
-	return nullptr;
-}
-
 void Atf::AtfCommObjectImpl::_processTimerMessage(UINT32 handle, UINT32 msgId, CommMsgBody& body)
 {
 }
@@ -168,10 +163,12 @@ void Atf::AtfCommClientGConnection::_traceDisconnected(int errCode, const char* 
 Atf::AtfCommServerConnection::AtfCommServerConnection(AtfCommObjectImpl* obj_, bool isPeerGConnection_, const char* connTraceMarker)
 	: atfServerObj(nullptr), _isPeerGConnection(isPeerGConnection_), _inAtfTraceLog(false)
 {
+	setTraceMarker(connTraceMarker);
 }
 
 void Atf::AtfCommServerConnection::setTraceMarker(const char* newTraceMarker)
 {
+	_traceMarker.assign(newTraceMarker);
 }
 
 void Atf::AtfCommServerConnection::postMsg(const Atf::MessageProtocol& msg, bool trace /* = true */)
@@ -188,10 +185,6 @@ void Atf::AtfCommServerConnection::postGMsg(UINT32 reqId, UINT32 msgId, CommMsgB
 
 void Atf::AtfCommServerConnection::traceOutgoing(UINT32 msgId, const CommMsgBody& body)
 { }
-
-void Atf::AtfCommServerConnection::post(UINT32 msgId, CommMsgBody& body)
-{
-}
 
 void Atf::AtfCommServerConnection::processMessage(UINT32 msgId, const CommMsgBody& body)
 {
@@ -268,10 +261,6 @@ void Atf::Service::postMsgToClient(UINT32 connId, const Atf::MessageProtocol& ms
 }
 
 void Atf::Service::postMsgToClient(UINT32 connId, UINT32 msgId, const Atf::MessageProtocol& msg, bool trace /* = true */)
-{
-}
-
-void Atf::Service::postMsgToGClient(UINT32 connId, UINT32 reqId, const Atf::MessageProtocol& msg, bool trace /* = true */)
 {
 }
 

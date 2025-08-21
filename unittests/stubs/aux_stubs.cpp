@@ -123,15 +123,12 @@ Atf::AtfCommClientGConnection::~AtfCommClientGConnection()
 }
 
 void Atf::AtfCommClientGConnection::setTraceMarker(const char* newTraceMarker)
-{}
+{
+	_traceMarker.assign(newTraceMarker);
+}
 
 void Atf::AtfCommClientGConnection::traceOutgoing(UINT32 msgId, UINT32 reqId)
 {
-}
-
-UINT32 Atf::AtfCommClientGConnection::post(UINT32 msgId, CommMsgBody& body, AsyncCall* call /* = 0 */)
-{
-	return 0;
 }
 
 UINT32 Atf::AtfCommClientGConnection::asyncSend(const MessageProtocol& msg, std::function<void(UINT32 reqId, UINT32 replyMsgId, const CommMsgBody& replyMsgBody)> callbackFunc, bool trace /*= true */)
@@ -226,26 +223,6 @@ Atf::ServiceReplyWaitableOnReliableConnection::ServiceReplyWaitableOnReliableCon
 
 void Atf::Service::setServiceReturnMsg(UINT32 resMsgId, CommMsgBody& resMsg)
 { }
-
-UINT32 Atf::Service::sendMsgToServer(AtfCommClientGConnection& conn, UINT32 msgId, CommMsgBody& body)
-{
-	return 0;
-}
-
-UINT32 Atf::Service::sendMsgToServer(AtfCommClientGConnection& conn, const Atf::MessageProtocol& msg, bool trace /* = true */)
-{
-	return 0;
-}
-
-UINT32 Atf::Service::sendMsgToServer(AtfCommClientGConnectionEx& conn, UINT32 msgId, CommMsgBody& body)  // GConnection only
-{
-	return 0;
-}
-
-UINT32 Atf::Service::sendMsgToServer(AtfCommClientGConnectionEx& conn, const Atf::MessageProtocol& msg, bool trace /* = true */)
-{
-	return 0;
-}
 
 // it is the application's responsibility to make sure that the logic connection (conn) is connected (after connected() call back) when this function is called
 void Atf::Service::sendMsgToServer(AtfCommClientConnection& conn, const MessageProtocol& msg, UINT32 replyMsgId, UINT32 disconnectNotifMsgId /*= DEFAULT_MSGID_FOR_SERVICE_RELIABLE_CONNECTION_DISCONNECT*/, bool trace /*= true*/)

@@ -32,3 +32,8 @@ CommServerConnection* Atf::AtfServerReverseGConnectionFactory::_AtfCommServerCon
 void Atf::AtfCommObjectImpl::registerConnectionFactory(const char* name, CommServerConnectionFactory& factory)
 {
 }
+
+UINT32 Atf::AtfCommClientGConnection::post(UINT32 msgId, CommMsgBody& body, AsyncCall* call /* = 0 */)
+{
+	return 0;
+}

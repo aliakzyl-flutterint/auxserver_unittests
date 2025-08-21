@@ -69,24 +69,6 @@ TEST_F(TestAdminAndISServers, init_admin_server)
 	CommMsgBody msgAdminInit;
 	EXPECT_TRUE(adminServer._safeInit(msgAdminInit));
 	EXPECT_EQ(0, fakeServer->serviceMap.size());
-
-
-	//expects::ExpectAuxRaceInits();
-	//EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
-	//MockCommInterface commRace;
-	//RaceServer::AuxRaceServerObject raceServer(commRace);
-	//CommMsgBody msgRaceInit;
-	//EXPECT_TRUE(raceServer._safeInit(msgRaceInit));
-	//EXPECT_EQ(1, fakeServer->serviceMap.size());
-
-	//expects::ExpectLobbyInits();
-	//EXPECT_CALL(*mockService, serviceStarted("InitLobby"));
-	//MockCommInterface commLobby;
-	//AuxLobbyServerObject lobbyServer(commLobby);
-	//expects::ExpectLobbyConnects(lobbyServer);
-	//CommMsgBody msgLobbyInit;
-	//EXPECT_TRUE(lobbyServer._safeInit(msgLobbyInit));
-	//EXPECT_EQ(2, fakeServer->serviceMap.size());
 }
 
 TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
@@ -104,11 +86,24 @@ TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
 	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxtable")).Times(AtLeast(2));
 	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxserver"));
 
+    // Init the admin server
 	MockCommInterface commAdmin;
 	AuxAdminServerObject adminServer(commAdmin);
 	CommMsgBody msgAdminInit;
 	adminServer._safeInit(msgAdminInit);
 
+    // Init the IS server
+	expects::ExpectISInits();
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxis")).Times(AtLeast(2));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxapp"));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "is"));
+	EXPECT_CALL(*fakeConnection, clientPostMsg("AUX_REEF_MSG_Q_SEND", _));
+
+	MockCommInterface commIs;
+	AuxIntegrationServerObject isServer(commIs);
+	CommMsgBody msgIsInit;
+	isServer._safeInit(msgIsInit);
+	
 	AuxAdminServerConnection adminConnection(&adminServer, true);
 	
 	vector<const char*> rights = { AUX_ADM_PRIV_MANAGE_IS_REQUESTS };
@@ -126,5 +121,10 @@ TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
 	EXPECT_CALL(*mockService, serviceStarted("DelIsSuspend"));
 	adminServer.processPortalMessage(AUX_ADM_MSG_Q_DEL_IS_SUSPEND_REQUESTS, msgDelSuspend, &adminConnection);
 
+	EXPECT_CALL(*fakeConnection, post("is", _, _)).WillRepeatedly(
+		[&isServer](const std::string& traceMarker, UINT32 msgId, const CommMsgBody& body) {
+            isServer.processServerMessage(AUX_IS_MSG_Q_DEL_IS_SUSPEND_REQUESTS, body, nullptr);
+			return 0;
+        });
     fakeServer->sendRequest("DelIsSuspend");
 }

@@ -104,3 +104,29 @@ void Atf::SimpleServiceClazz::cleanUpWhenServiceExit()
 {
 	onExit();
 }
+
+UINT32 Atf::Service::sendMsgToServer(AtfCommClientGConnection& conn, UINT32 msgId, CommMsgBody& body)
+{
+	return conn.post(msgId, body, nullptr);
+}
+
+UINT32 Atf::Service::sendMsgToServer(AtfCommClientGConnectionEx& conn, UINT32 msgId, CommMsgBody& body)  // GConnection only
+{
+	return conn.post(msgId, body, nullptr);
+}
+
+UINT32 Atf::Service::sendMsgToServer(AtfCommClientGConnection& conn, const Atf::MessageProtocol& msg, bool trace /* = true */)
+{
+	CommMsgBody body;
+	msg.composeMsg(body);
+
+	return sendMsgToServer(conn, msg.getMsgId(), body);
+}
+
+UINT32 Atf::Service::sendMsgToServer(AtfCommClientGConnectionEx& conn, const Atf::MessageProtocol& msg, bool trace /* = true */)
+{
+	CommMsgBody body;
+	msg.composeMsg(body);
+
+	return sendMsgToServer(conn, msg.getMsgId(), body);
+}

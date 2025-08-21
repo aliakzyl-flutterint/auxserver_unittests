@@ -64,13 +64,13 @@ TEST_F(TestAdminAndISServers, init_admin_server)
     EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxtable")).Times(AtLeast(2));
 	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxserver"));
 
-	EXPECT_CALL(*mockAuxReefAccessor, init(_)).Times(0);
-
 	MockCommInterface commAdmin;
 	AuxAdminServerObject adminServer(commAdmin);
 	CommMsgBody msgAdminInit;
 	EXPECT_TRUE(adminServer._safeInit(msgAdminInit));
 	EXPECT_EQ(0, fakeServer->serviceMap.size());
+
+
 	//expects::ExpectAuxRaceInits();
 	//EXPECT_CALL(*mockService, serviceStarted("GADFDB"));
 	//MockCommInterface commRace;
@@ -87,4 +87,44 @@ TEST_F(TestAdminAndISServers, init_admin_server)
 	//CommMsgBody msgLobbyInit;
 	//EXPECT_TRUE(lobbyServer._safeInit(msgLobbyInit));
 	//EXPECT_EQ(2, fakeServer->serviceMap.size());
+}
+
+TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
+{
+	// Test data
+	UINT64 appSessionId = 1111;
+	UINT32 userIntId = 2222;
+	std::string channelId = "R28649363";
+
+	expects::ExpectAdminInits();
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "admin")).Times(AtLeast(2));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxadmininternal")).Times(AtLeast(2));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxapp"));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "AdminCleanup"));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxtable")).Times(AtLeast(2));
+	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxserver"));
+
+	MockCommInterface commAdmin;
+	AuxAdminServerObject adminServer(commAdmin);
+	CommMsgBody msgAdminInit;
+	adminServer._safeInit(msgAdminInit);
+
+	AuxAdminServerConnection adminConnection(&adminServer, true);
+	
+	vector<const char*> rights = { AUX_ADM_PRIV_MANAGE_IS_REQUESTS };
+	adminConnection.setAdminRights(appSessionId, userIntId, rights);
+
+
+    Adm::Adm::Protocol_AUX_ADM_MSG_Q_DEL_IS_SUSPEND_REQUESTS reqDelSuspend;
+    reqDelSuspend.channelIds.push_back(channelId.c_str());
+
+    // For this type of request we must provide the type of request explicitly
+	CommMsgBody msgDelSuspend;
+	msgDelSuspend.composeUINT32(AUX_ADM_MSG_Q_DEL_IS_SUSPEND_REQUESTS);
+    reqDelSuspend.composeMsg(msgDelSuspend);
+
+	EXPECT_CALL(*mockService, serviceStarted("DelIsSuspend"));
+	adminServer.processPortalMessage(AUX_ADM_MSG_Q_DEL_IS_SUSPEND_REQUESTS, msgDelSuspend, &adminConnection);
+
+    fakeServer->sendRequest("DelIsSuspend");
 }

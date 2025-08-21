@@ -2,6 +2,15 @@
 #include "atf/MockService.h"
 #include "Service.h"
 
+namespace
+{
+	enum SIMPLE_SERVICE_STATES {
+		ONREPLY = 2, ONREPLY2, ONREPLY3, ONREPLY4, ONREPLY5, ONREPLY6, ONREPLY7, ONREPLY8, ONREPLY9, ONREPLY10,
+		ONREPLY11, ONREPLY12, ONREPLY13, ONREPLY14, ONREPLY15, ONREPLY16, ONREPLY17, ONREPLY18, ONREPLY19, ONREPLY20,
+		SIMPLE_SERVICE_STATES_NAMES_SIZE /*must be the last one*/
+	};
+}
+
 void FakeServer::addService(const std::string& serviceName, Atf::Service* service)
 {
 	if (!service) return;
@@ -9,24 +18,32 @@ void FakeServer::addService(const std::string& serviceName, Atf::Service* servic
 	
 }
 
+void FakeServer::sendRequest(const std::string& serviceName)
+{
+	auto& service = serviceMap[serviceName];
+	CommMsgBody emptyMsg;
+    service->directGoToNewState(Atf::BASE_SERVICE_STATES::INIT_STATE);
+	service->safeProcessMessage(0, emptyMsg);
+}
+
 void FakeServer::triggerOnReply(const std::string& serviceName, unsigned int msgId, const CommMsgBody& msg)
 {
 	auto& service = serviceMap[serviceName];
-	service->directGoToNewState(2);
+	service->directGoToNewState(SIMPLE_SERVICE_STATES::ONREPLY);
 	service->safeProcessMessage(msgId, msg);
 }
 
 void FakeServer::triggerOnReply2(const std::string& serviceName, unsigned int msgId, const CommMsgBody& msg)
 {
 	auto& service = serviceMap[serviceName];
-	service->directGoToNewState(3);
+    service->directGoToNewState(SIMPLE_SERVICE_STATES::ONREPLY2);
 	service->safeProcessMessage(msgId, msg);
 }
 
 void FakeServer::triggerOnReply3(const std::string& serviceName, unsigned int msgId, const CommMsgBody& msg)
 {
 	auto& service = serviceMap[serviceName];
-	service->directGoToNewState(4);
+    service->directGoToNewState(SIMPLE_SERVICE_STATES::ONREPLY3);
 	service->safeProcessMessage(msgId, msg);
 }
 

@@ -59,7 +59,7 @@ protected:
 
         LobbyLoginSessionPtr loginSession(new LobbyLoginSession(lobbyPlayer));
         loginSession->hostId = hostId;
-        loginSession->siteId = siteId;       
+        loginSession->siteId = siteId;
 
         INT16 errorCode = auxclienterr::ERROR_CLIENT_NOERROR;
         PString errorMessage;

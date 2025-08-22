@@ -40,6 +40,7 @@ protected:
 		GenericServerObjectSuite::SetUp();
 	};
 
+
 	void TearDown() override
 	{
 		GenericServerObjectSuite::TearDown();
@@ -54,6 +55,24 @@ protected:
 	{
 
 	}
+
+	void FakeISRequests(AuxIntegrationServerObject* isServer)
+	{
+		IS::RaceServer::Protocol_AUX_IS_MSG_Q_RACE_RESULT msg;
+		auto activeRequest = new PlayerRaceResultServerRequest(isServer, 0, 0, 1, msg);
+		activeRequest->setChannelId(channelId.c_str());
+		activeRequest->lifeCycle->setStatus(IS_REQUEST_STATUS_SUSPENDED_PERMANENTLY);
+		isServer->mapActiveIntegrationServerRequests.insert(channelId.c_str(), activeRequest);
+		auto gameServerRequest = new PlayerRaceResultServerRequest(isServer, 0, 0, 2, msg);
+		activeRequest->setChannelId(channelId.c_str());
+		isServer->mapGameServerRequestQueues.insert(channelId.c_str(), {gameServerRequest});
+	}
+
+	// Test data
+	const UINT64 appSessionId = 1111;
+	const UINT32 userIntId = 2222;
+	const std::string channelId = "R28649363";
+	const std::string DelIsSuspendService = "DelIsSuspend";
 };
 
 TEST_F(TestAdminAndISServers, init_is_server)
@@ -92,11 +111,6 @@ TEST_F(TestAdminAndISServers, init_admin_server)
 
 TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
 {
-	// Test data
-	UINT64 appSessionId = 1111;
-	UINT32 userIntId = 2222;
-	std::string channelId = "R28649363";
-	const std::string DelIsSuspendService = "DelIsSuspend";
 
 	expects::ExpectAdminInits();
 	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "admin")).Times(AtLeast(2));
@@ -124,6 +138,7 @@ TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
 	AuxIntegrationServerObject isServer(commIs);
 	CommMsgBody msgIsInit;
 	isServer._safeInit(msgIsInit);
+    FakeISRequests(&isServer);
 	
 	// Init connections
 	AuxAdminServerConnection adminConnection(&adminServer, true);	
@@ -157,7 +172,7 @@ TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
         });
 
 	EXPECT_CALL(*fakeConnection, post("ISR", AUX_IS_MSG_A_DEL_IS_SUSPEND_REQUESTS, _)).WillRepeatedly(
-		[&DelIsSuspendService](const std::string& traceMarker, UINT32 msgId, const CommMsgBody& body) {
+		[this](const std::string& traceMarker, UINT32 msgId, const CommMsgBody& body) {
 			CommMsgBody newMsg = removeReqId<IS::AdminServer::Protocol_AUX_IS_MSG_A_RESEND_IS_SUSPEND_REQUESTS>(body);
 			fakeServer->triggerOnReply(DelIsSuspendService, msgId, newMsg);
 			fakeServer->triggerOnExit(DelIsSuspendService);

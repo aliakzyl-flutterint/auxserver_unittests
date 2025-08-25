@@ -65,6 +65,7 @@ protected:
 		activeRequest->lifeCycle->setStatus(IS_REQUEST_STATUS_SUSPENDED_PERMANENTLY);
 		isServer->mapActiveIntegrationServerRequests.insert(channelId.c_str(), activeRequest);
 		auto gameServerRequest = new PlayerRaceResultServerRequest(isServer, 0, msg.getMsgId(), 2, msg);
+		gameServerRequest->lifeCycle->setStatus(IS_REQUEST_STATUS_UNKNOWN);
 		activeRequest->setChannelId(channelId.c_str());
 		isServer->mapGameServerRequestQueues.insert(channelId.c_str(), {gameServerRequest});
 	}
@@ -133,7 +134,10 @@ TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
 	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxis")).Times(AtLeast(2));
 	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "auxapp"));
 	EXPECT_CALL(*mockAtfCommObjectImpl, connect(_, _, "is"));
-	EXPECT_CALL(*fakeConnection, clientPostMsg("AUX_REEF_MSG_Q_SEND", _));
+    EXPECT_CALL(*fakeConnection, clientPostMsg("AUX_REEF_MSG_Q_SEND", _)).Times(AtLeast(1));
+
+	EXPECT_CALL(*fakeConnection, post_callback("idb", AUX_DBM_MSG_Q_IS_NEED_DATA, _, _));
+	EXPECT_CALL(*fakeConnection, findConnection("")).Times(AtLeast(1));
 
 	MockCommInterface commIs;
 	AuxIntegrationServerObject isServer(commIs);
@@ -172,9 +176,13 @@ TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
 			return 0;
         });
 
-	EXPECT_CALL(*fakeConnection, post_callback("ppb", _, _, _)).WillRepeatedly(
+	EXPECT_CALL(*fakeConnection, post_callback("ppb", AUX_BOA_MSG_Q_RACE_RESULT, _, _)).WillRepeatedly(
 		[&isServer, &backConn](const std::string& traceMarker, UINT32 msgId, const CommMsgBody& body, RefAsyncCall* callback) {
-			callback->processReply(0, msgId, body);
+			BackofficeAdaptor::IS::Protocol_AUX_BOA_MSG_A_RACE_RESULT boaReply;
+			boaReply.errorCode = auxservererr::ServerErrorCode::SERVER_ERROR_SERVICE_ILLEGAL_STATE;
+			CommMsgBody replyBody;
+			boaReply.composeMsg(replyBody);
+			callback->processReply(0, msgId, replyBody);
 			return 0;
 		});
 

@@ -24,6 +24,7 @@ ${STUBS_PATH}/atf_stubs.cpp
 ${STUBS_PATH}/atf1_stubs.cpp
 ${STUBS_PATH}/auxgenerictypes_stubs.cpp
 ${STUBS_PATH}/AtfCommObjectImpl_stubs.cpp
+IntegrationCounter_stubs.cpp
 )
 
 set(FAKE_FILES
@@ -49,7 +50,7 @@ set(PRODUCTION_FILES
 		${AUX_PATH}/auxadmin/AuxAdminServerObject.cpp
 		# IS Server
 		${AUX_PATH}/auxintegrationserver/integrationserverobject.cpp
-		${AUX_PATH}/auxintegrationserver/integrationcounters.cpp
+		#${AUX_PATH}/auxintegrationserver/integrationcounters.cpp
 )
 
 set (AUX_FILES

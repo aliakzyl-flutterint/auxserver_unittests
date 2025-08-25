@@ -40,7 +40,7 @@ void Atf::AtfCommServerConnection::postGMsg(UINT32 reqId, const Atf::MessageProt
 UINT32 Atf::AtfCommClientGConnection::post(UINT32 msgId, CommMsgBody& body, AsyncCall* call /* = 0 */)
 {
 	std::string traceMarker(this->_traceMarker.c_str());
-    return fakeConnection->post(traceMarker, msgId, body);
+    return fakeConnection->post_callback(traceMarker, msgId, body, call);
 }
 
 void Atf::AtfCommServerConnection::post(UINT32 msgId, CommMsgBody& body)

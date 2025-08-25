@@ -59,11 +59,12 @@ protected:
 	void FakeISRequests(AuxIntegrationServerObject* isServer)
 	{
 		IS::RaceServer::Protocol_AUX_IS_MSG_Q_RACE_RESULT msg;
-		auto activeRequest = new PlayerRaceResultServerRequest(isServer, 0, 0, 1, msg);
+		msg.hostId = aux::HostType::HOST_SKYBETMARS;
+		auto activeRequest = new PlayerRaceResultServerRequest(isServer, 0, msg.getMsgId(), 1, msg);
 		activeRequest->setChannelId(channelId.c_str());
 		activeRequest->lifeCycle->setStatus(IS_REQUEST_STATUS_SUSPENDED_PERMANENTLY);
 		isServer->mapActiveIntegrationServerRequests.insert(channelId.c_str(), activeRequest);
-		auto gameServerRequest = new PlayerRaceResultServerRequest(isServer, 0, 0, 2, msg);
+		auto gameServerRequest = new PlayerRaceResultServerRequest(isServer, 0, msg.getMsgId(), 2, msg);
 		activeRequest->setChannelId(channelId.c_str());
 		isServer->mapGameServerRequestQueues.insert(channelId.c_str(), {gameServerRequest});
 	}
@@ -165,11 +166,17 @@ TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
 		}
 	);
 
-	EXPECT_CALL(*fakeConnection, post("is", AUX_IS_MSG_Q_DEL_IS_SUSPEND_REQUESTS, _)).WillRepeatedly(
-		[&isServer, &backConn](const std::string& traceMarker, UINT32 msgId, const CommMsgBody& body) {
+	EXPECT_CALL(*fakeConnection, post_callback("is", AUX_IS_MSG_Q_DEL_IS_SUSPEND_REQUESTS, _, _)).WillRepeatedly(
+		[&isServer, &backConn](const std::string& traceMarker, UINT32 msgId, const CommMsgBody& body, RefAsyncCall*) {
             isServer.processServerMessage(msgId, body, &backConn);
 			return 0;
         });
+
+	EXPECT_CALL(*fakeConnection, post_callback("ppb", _, _, _)).WillRepeatedly(
+		[&isServer, &backConn](const std::string& traceMarker, UINT32 msgId, const CommMsgBody& body, RefAsyncCall* callback) {
+			callback->processReply(0, msgId, body);
+			return 0;
+		});
 
 	EXPECT_CALL(*fakeConnection, post("ISR", AUX_IS_MSG_A_DEL_IS_SUSPEND_REQUESTS, _)).WillRepeatedly(
 		[this](const std::string& traceMarker, UINT32 msgId, const CommMsgBody& body) {
@@ -187,7 +194,8 @@ TEST_F(TestAdminAndISServers, processDeleteIsSuspendRequests)
 			{
 				Adm::Adm::Protocol_AUX_ADM_MSG_A_DEL_IS_SUSPEND_REQUESTS response;
 				response.parseMessage(msg);
-				EXPECT_EQ(auxservererr::SERVER_ERROR_SYSTEM, response.errCode);
+				//EXPECT_EQ(auxservererr::SERVER_ERROR_SYSTEM, response.errCode);
+				EXPECT_EQ(0, response.errCode);
 			}
 		);
     fakeServer->sendRequest(DelIsSuspendService);

@@ -12,6 +12,7 @@ namespace Atf
 }
 
 class CommServerConnectionFactory;
+class RefAsyncCall;
 
 class FakeConnection
 {
@@ -32,6 +33,7 @@ public:
 
     friend Atf::AtfServerReverseGConnection;
     MOCK_METHOD(UINT32, post, (const std::string& traceMarker, UINT32 msgId, CommMsgBody& body));
+    MOCK_METHOD(UINT32, post_callback, (const std::string& traceMarker, UINT32 msgId, CommMsgBody& body, RefAsyncCall* callback));
     MOCK_METHOD(void, reversePostGMsg,(const std::string& traceMarker, UINT32 reqId, const Atf::MessageProtocol& msg));
     MOCK_METHOD(void, clientPostMsg, (const std::string& msgIdStr, const Atf::MessageProtocol& msg));
     MOCK_METHOD(void, serverPostMsg, (const std::string& msgIdStr, UINT32 reqId, const Atf::MessageProtocol& msg));
